@@ -1,0 +1,137 @@
+<script>
+    let { data, children } = $props();
+    import {page} from '$app/state';
+
+    import { toggleMode } from "mode-watcher";
+    import { LayoutDashboard, IdCardLanyard, GraduationCap, Users, CircleDollarSign, BookOpenText, HeartHandshake, SunIcon, MoonIcon, PanelRightOpen, PanelRightClose } from '@lucide/svelte';
+
+let currentPage = $state(page.url.pathname.charAt(1).toUpperCase() + page.url.pathname.slice(2));
+
+
+  const navItems = [
+    { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+    { name: 'Employees', href: '/dashboard/employees', icon: IdCardLanyard },
+    { name: 'Parents', href: '/dashboard/parents', icon: HeartHandshake },
+    { name: 'Students', href: '/dashboard/students', icon: GraduationCap },
+    { name: 'Tutors', href: '/dashboard/tutors', icon: BookOpenText },
+    { name: 'Payments', href: '/dashboard/payments', icon: CircleDollarSign },
+    { name: 'Users', href: '/dashboard/users', icon: Users }
+  ];
+
+
+  let fileteredItems = $state([]);
+
+  if(data.roleDetails.name === 'Admin') {
+     fileteredItems = navItems;   
+  }
+  else if(data.roleDetails.name === 'Customer Service'){
+    fileteredItems = navItems.filter(item => !['Payments', 'Employees', 'Users'].includes(item.name));
+  }
+  else if(data.roleDetails.name === 'Financial Officer'){
+        fileteredItems = navItems.filter(item => !['Users', 'Students'].includes(item.name));
+  }
+  else if(data.roleDetails.name === 'Project Manager'){
+        fileteredItems = navItems.filter(item => !['Payments'].includes(item.name));
+  }
+  else if(data.roleDetails.name === 'HR'){
+        fileteredItems = navItems.filter(item => !['Users'].includes(item.name));
+  }
+  
+  let sidebar = $state(true);
+import { authClient } from "$lib/auth-client";
+
+  const session = authClient.useSession();
+
+</script>
+
+<div class="flex h-screen shadow-xl shadow-black dark:shadow-white">
+  <!-- Sidebar -->
+  <aside class="shadow-lg p-2">
+    <div class="p-4 text-2xl font-bold flex flex-row justify-between gap-8">
+      {#if sidebar === true}
+       <a href="/dashboard">
+        <img src="/ethioiq.png" alt="Ethio IQ Logo" >
+        </a>
+        <button onclick={()=>sidebar = false}>
+        <PanelRightOpen />
+        </button>
+      {:else} 
+       <button onclick={()=>sidebar = true} >
+         <PanelRightClose />        
+     </button>
+      {/if}
+       
+        
+    </div>
+    <nav class="mt-4 flex flex-col">
+    {#each fileteredItems as item}
+      <a
+        class="w-full flex flex-row items-center text-left px-4 py-2 transition-all duration-100 gap-2 dark:text-white
+            hover:shadow-md shadow-orange-400  rounded-lg hover:dark:border-1 hover:dark:border-orange-400
+            aria-[current=page]:bg-orange-100 dark:aria-[current=page]:bg-[#f06e30]" 
+             aria-current={page.url.pathname === item.href ? 'page' : undefined}
+        class:selected={currentPage === item.name}
+        href={item.href}
+      > 
+        <item.icon size="20" />
+
+         {#if sidebar}
+         <span> {item.name}</span>
+        
+         {/if}
+      </a>
+    {/each}
+   </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="flex-1 flex flex-col">
+    <!-- Header -->
+    <header class="shadow-md p-4 flex  flex-row items-center justify-between">
+      <h1 class="text-xl font-semibold">
+        {(navItems.find(item => item.href === page.url.pathname)?.name) || ''}
+      </h1>
+      
+      <div class="flex flex-row gap-2">
+        <img src={$session.data?.user.image} class="rounded-[50%] h-[1.6rem] w-[1.6rem]" alt="Avatar" />
+      <button onclick={toggleMode}>
+  <SunIcon
+    class="h-[1.2rem] w-[1.2rem] scale-100 !transition-all dark:scale-0"
+  />
+  <MoonIcon
+    class="h-[1.2rem] w-[1.2rem] scale-0 !transition-all dark:scale-100"
+  />
+  <span class="sr-only">Toggle theme</span>
+</button>
+</div>
+    </header>
+
+    <!-- Content -->
+    <main class="p-6 flex-1 overflow-auto">
+      {#if page.url.pathname === '/dashboard'}
+        <p>Welcome to the Dashboard.</p>
+      {:else if page.url.pathname === '/dashboard/employees'}
+        <p>Here are the Employees.</p>
+      {:else if page.url.pathname === '/dashboard/parents'}
+        <p>List of Parents.</p>
+      {:else if page.url.pathname === '/dashboard/students'}
+        <p>Student information goes here.</p>
+      {:else if page.url.pathname == '/dashboard/tutors'}
+        <p>Meet our Tutors.</p>
+      {:else if page.url.pathname == '/dashboard/payments'}
+       <p>All Payments are here</p>
+      {:else if page.url.pathname === 'dashboard/users'}
+        <p>Manage Users here.</p>
+      {/if}
+          {@render children()}
+    </main>
+  </div>
+</div>
+
+
+
+ 
+
+    
+
+

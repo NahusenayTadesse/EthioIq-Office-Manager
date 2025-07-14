@@ -39,7 +39,7 @@ const handleSignIn = async () => {
                 <input
                     id="email"
                     type="email"
-                    placeholder="m@example.com"
+                    placeholder="example@ethioiq.com"
                     required
                     class={input}
                     bind:value={$email}
@@ -87,9 +87,6 @@ const handleSignIn = async () => {
                 Login with Google
             </button>
         </form>
-        <div class="mt-8 text-center text-sm text-gray-600 dark:text-gray-400">
-            Don&apos;t have an account?
-            <a href="/signup" class="text-blue-600 dark:text-blue-400 hover:underline font-medium">Sign up</a>
-        </div>
+        
     </div>
 </div>
