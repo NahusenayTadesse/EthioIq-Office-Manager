@@ -25,10 +25,9 @@ const handleSignIn = async () => {
 <div class={formContainer}>
     <div class={formContainerInner}>
         <div class="mb-8 text-center">
-            <svg class="mx-auto mb-4 h-12 w-12 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <circle cx="12" cy="12" r="10" stroke-width="2" />
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12l2 2 4-4" />
-            </svg>
+            <div class="flex flex-col justify-center items-center">
+           <img src="/ethioiq.png" class="w-1/2" alt="Ethio Iq Logo">
+           </div>
             <h2 class="text-3xl font-extrabold text-gray-900 dark:text-white mb-2">Sign in to your account</h2>
             <p class="text-gray-500 dark:text-gray-400">
                 Enter your email below to login to your account

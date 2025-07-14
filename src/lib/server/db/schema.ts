@@ -1,8 +1,8 @@
 import { pgTable, varchar, timestamp, boolean, integer, serial, text, json, uuid, date, time, decimal} from 'drizzle-orm/pg-core';
 
 // Authentication Tables (adapted for PostgreSQL)
-export const users = pgTable('users', {
-  id: uuid('id').primaryKey().defaultRandom(),
+export const user = pgTable('user', {
+  id: varchar('id').primaryKey(),
   name: varchar('name', { length: 255 }).notNull(),
   email: varchar('email', { length: 255 }).notNull().unique(),
   emailVerified: boolean('email_verified').notNull().default(false),
@@ -16,9 +16,9 @@ export const users = pgTable('users', {
   isActive: boolean('is_active').notNull().default(true),
 });
 
-export const sessions = pgTable('sessions', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+export const session = pgTable('session', {
+  id: varchar('id').primaryKey(),
+  userId: varchar('user_id').notNull().references(() => user.id, { onDelete: 'cascade' }),
   token: varchar('token', { length: 255 }).notNull().unique(),
   expiresAt: timestamp('expires_at').notNull(),
   ipAddress: varchar('ip_address', { length: 45 }),
@@ -27,9 +27,9 @@ export const sessions = pgTable('sessions', {
   updatedAt: timestamp('updated_at').notNull().defaultNow().$onUpdate(() => new Date()),
 });
 
-export const accounts = pgTable('accounts', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+export const account = pgTable('account', {
+  id: varchar('id').primaryKey(),
+  userId: varchar('user_id').notNull().references(() => user.id, { onDelete: 'cascade' }),
   accountId: varchar('account_id', { length: 255 }).notNull(),
   providerId: varchar('provider_id', { length: 255 }).notNull(),
   accessToken: varchar('access_token', { length: 2048 }),
@@ -43,8 +43,8 @@ export const accounts = pgTable('accounts', {
   updatedAt: timestamp('updated_at').notNull().defaultNow().$onUpdate(() => new Date()),
 });
 
-export const verifications = pgTable('verifications', {
-  id: uuid('id').primaryKey().defaultRandom(),
+export const verification = pgTable('verification', {
+  id: varchar('id').primaryKey(),
   identifier: varchar('identifier', { length: 255 }).notNull(),
   value: varchar('value', { length: 1024 }).notNull(),
   expiresAt: timestamp('expires_at').notNull(),
@@ -78,7 +78,7 @@ export const rolePermissions = pgTable('role_permissions', {
 
 export const specialPermissions = pgTable('special_permissions', {
   id: serial('id').primaryKey(),
-  userId: uuid('user_id').notNull().references(() => users.id),
+  userId: varchar('user_id').notNull().references(() => user.id),
   permissionId: integer('permission_id').notNull().references(() => permissions.id),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow().$onUpdate(() => new Date()),
@@ -86,7 +86,7 @@ export const specialPermissions = pgTable('special_permissions', {
 
 export const persons = pgTable('persons', {
   id: uuid('id').primaryKey().defaultRandom(),
-  userId: uuid('user_id').references(() => users.id),
+  userId: varchar('user_id').references(() => user.id),
   type: varchar('type', { length: 20 }).notNull(), // 'student', 'tutor', 'parent', 'employee'
   firstName: varchar('first_name', { length: 50 }).notNull(),
   lastName: varchar('last_name', { length: 50 }).notNull(),
@@ -106,6 +106,7 @@ export const students = pgTable('students', {
   naturalOrSocial: varchar('natural_or_social', {length: 20}),
   notes: text('notes'),
   location: integer('location').notNull().references(() => locations.id),
+  fee: integer('fee').notNull().default(400), //either 400 or 300
   specificLocation: text('specific_location').notNull(),
   prefferedGender: varchar('gender', {length: 10}).notNull().default('female'),
   isActive: boolean('is_active').notNull().default(true),
@@ -118,7 +119,7 @@ export const tutors = pgTable('tutors', {
   id: serial('id').primaryKey(),
   personId: uuid('person_id').notNull().references(() => persons.id),
   qualifications: text('qualifications'),
-  grade: varchar('grade', { length: 20 }),
+  gradePreference: varchar('grade_preference', { length: 20 }),
   location: integer('location').notNull().references(() => locations.id),
   specificLocation: text('specific_location').notNull(),
   naturalOrSocial: varchar('natural_or_social', {length: 20}),
@@ -282,7 +283,7 @@ export const student_progress = pgTable('student_progress', {
   studentId: integer('student_id').notNull().references(() => students.id),
   subjectId: integer('subject_id').notNull().references(() => subjects.id),
   progressNote: text('progress_note').notNull(),
-  recordedBy: uuid('recorded_by').notNull().references(() => users.id),
+  recordedBy: varchar('recorded_by').notNull().references(() => user.id),
   progressDate: date('progress_date').notNull().defaultNow(),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow().$onUpdate(() => new Date()),
@@ -441,8 +442,7 @@ export const contacts = pgTable('contacts', {
   id: serial('id').primaryKey(),
   personId: uuid('person_id').notNull().references(() => persons.id), // FK -> person.id
   type: varchar('type', { length: 50 }).notNull(), // 'phone', 'email', 'telegram', etc.
-  value: varchar('value', { length: 255 }).notNull(),
-  label: varchar('label', { length: 100 }), // e.g., 'personal', 'work', 'mother', 'emergency'
+  value: varchar('value', {length: 100 }), // e.g., 'personal', 'work', 'mother', 'emergency'
   isPrimary: boolean('is_primary').notNull().default(false),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow().$onUpdate(() => new Date()),
@@ -453,7 +453,7 @@ export const contacts = pgTable('contacts', {
 export const comments = pgTable('comments', {
   id: serial('id').primaryKey(),
   content: text('content').notNull(),
-  userId: uuid('user_id').notNull().references(() => users.id),
+  userId: varchar('user_id').notNull().references(() => user.id),
   entityType: varchar('entity_type', { length: 50 }).notNull(), // 'student', 'tutor', 'session', etc.
   entityId: integer('entity_id').notNull(),
   createdAt: timestamp('created_at').notNull().defaultNow(),
@@ -465,7 +465,7 @@ export const auditLogs = pgTable('audit_logs', {
   action: varchar('action', { length: 50 }).notNull(), // 'create', 'update', 'delete', 'login', etc.
   entityType: varchar('entity_type', { length: 50 }).notNull(),
   entityId: varchar('entity_id', { length: 50 }).notNull(),
-  userId: uuid('user_id').references(() => users.id),
+  userId: varchar('user_id').references(() => user.id),
   oldValues: json('old_values'),
   newValues: json('new_values'),
   ipAddress: varchar('ip_address', { length: 45 }),
@@ -480,17 +480,17 @@ export const documents = pgTable('documents', {
   ownerType: text('owner_type').notNull(), // 'tutor', 'student', 'employee', 'parent'
   documentType: text('document_type').notNull(), // 'id_card', 'contract', etc.
   fileUrl: text('file_url').notNull(), 
-  uploadedBy: uuid('uploaded_by').notNull().references(() => users.id), 
+  uploadedBy: varchar('uploaded_by').notNull().references(() => user.id), 
   uploadedAt: timestamp('uploaded_at').notNull().defaultNow(),
   isActive: boolean('is_active').notNull().default(true),
 });
 
 
 
-export type Users = typeof users.$inferSelect;
-export type Sessions = typeof sessions.$inferSelect;
-export type Accounts = typeof accounts.$inferSelect;
-export type Verifications = typeof verifications.$inferSelect;
+export type Users = typeof user.$inferSelect;
+export type Sessions = typeof session.$inferSelect;
+export type Accounts = typeof account.$inferSelect;
+export type Verifications = typeof verification.$inferSelect;
 export type Roles = typeof roles.$inferSelect;
 export type Permissions = typeof permissions.$inferSelect;
 export type RolePermissions = typeof rolePermissions.$inferSelect;

@@ -1,0 +1,1 @@
+<h1 class="text-center text-5xl text-orange-500">Welcome to Dashboard</h1>
