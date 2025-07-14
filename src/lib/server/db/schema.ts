@@ -102,11 +102,12 @@ export const students = pgTable('students', {
   id: serial('id').primaryKey(),
   personId: uuid('person_id').notNull().references(() => persons.id),
   grade: varchar('grade', { length: 20 }),
-  schoolName: varchar('school_name', { length: 100 }),
+  school: integer('school').notNull().references(() => schools.id),
   naturalOrSocial: varchar('natural_or_social', {length: 20}),
   notes: text('notes'),
   location: integer('location').notNull().references(() => locations.id),
   specificLocation: text('specific_location').notNull(),
+  prefferedGender: varchar('gender', {length: 10}).notNull().default('female'),
   isActive: boolean('is_active').notNull().default(true),
   behaviour: varchar('behaviour', { length: 100}),
   createdAt: timestamp('created_at').notNull().defaultNow(),
@@ -196,12 +197,25 @@ export const locations = pgTable('locations', {
   id: serial('id').primaryKey(),
   name: varchar('name', { length: 100 }).notNull(),
   directions: text('directions'),
+  branches: varchar('branch', { length: 100 }).notNull().array(),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow().$onUpdate(() => new Date()),
 });
 
-export const revenue_summaries = pgTable('revenue_summaries', {
+export const schools = pgTable('schools',{
+
   id: serial('id').primaryKey(),
+  name: varchar('name', { length: 100 }).notNull(),
+  type: varchar('type', {length: 20}), 
+  noOfStudents: integer('no_of_students'),
+  noOfBranches: integer('no_of_branches'),
+  location: varchar('location', { length: 100 }).notNull(),
+  adminName: varchar('admin_name', { length: 100 }),
+  adminContact: varchar('admin_contact', {length: 100}),
+}); 
+
+
+export const revenue_summaries = pgTable('revenue_summaries', {
   tutorId: integer('tutor_id').references(() => tutors.id),
   subjectId: integer('subject_id').references(() => subjects.id),
   period: date('period').notNull(), // e.g., '2025-07-01' for July 2025
