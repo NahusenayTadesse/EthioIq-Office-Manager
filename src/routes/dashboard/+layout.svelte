@@ -44,10 +44,11 @@ import { authClient } from "$lib/auth-client";
 
 </script>
 
-<div class="flex h-screen shadow-xl shadow-black dark:shadow-white">
+<div class="flex h-screen ">
   <!-- Sidebar -->
-  <aside class="shadow-lg p-2">
-    <div class="p-4 text-2xl font-bold flex flex-row justify-between gap-8">
+  <aside class="shadow-md p-2 dark:shadow-gray-300/70">
+    <div class="p-4 text-2xl font-bold flex flex-row justify-between gap-8 mb-8 
+    pb-8 border-b-1 border-gray-500 dark:border-white">
       {#if sidebar === true}
        <a href="/dashboard">
         <img src="/ethioiq.png" alt="Ethio IQ Logo" >
@@ -63,12 +64,13 @@ import { authClient } from "$lib/auth-client";
        
         
     </div>
-    <nav class="mt-4 flex flex-col">
+    <nav class="mt-4 flex flex-col gap-4">
     {#each fileteredItems as item}
       <a
-        class="w-full flex flex-row items-center text-left px-4 py-2 transition-all duration-100 gap-2 dark:text-white
-            hover:shadow-md shadow-orange-400  rounded-lg hover:dark:border-1 hover:dark:border-orange-400
-            aria-[current=page]:bg-orange-100 dark:aria-[current=page]:bg-[#f06e30]" 
+        class="w-full flex flex-row items-center text-left px-4 py-2  duration-100 gap-2 dark:text-white
+             rounded-lg hover:bg-gray-200 hover:dark:bg-gray-200/60
+            aria-[current=page]:bg-dark aria-[current=page]:text-white dark:aria-[current=page]:bg-gray-100 
+            dark:aria-[current=page]:text-dark transition-colors" 
              aria-current={page.url.pathname === item.href ? 'page' : undefined}
         class:selected={currentPage === item.name}
         href={item.href}
@@ -85,9 +87,9 @@ import { authClient } from "$lib/auth-client";
   </aside>
 
   <!-- Main Content -->
-  <div class="flex-1 flex flex-col">
+  <div class="flex-1 flex flex-col p-4">
     <!-- Header -->
-    <header class="shadow-md p-4 flex  flex-row items-center justify-between">
+    <header class="shadow-md p-4 flex flex-row items-center justify-between dark:shadow-gray-300/70 rounded-lg">
       <h1 class="text-xl font-semibold">
         {(navItems.find(item => item.href === page.url.pathname)?.name) || ''}
       </h1>
@@ -108,21 +110,6 @@ import { authClient } from "$lib/auth-client";
 
     <!-- Content -->
     <main class="p-6 flex-1 overflow-auto">
-      {#if page.url.pathname === '/dashboard'}
-        <p>Welcome to the Dashboard.</p>
-      {:else if page.url.pathname === '/dashboard/employees'}
-        <p>Here are the Employees.</p>
-      {:else if page.url.pathname === '/dashboard/parents'}
-        <p>List of Parents.</p>
-      {:else if page.url.pathname === '/dashboard/students'}
-        <p>Student information goes here.</p>
-      {:else if page.url.pathname == '/dashboard/tutors'}
-        <p>Meet our Tutors.</p>
-      {:else if page.url.pathname == '/dashboard/payments'}
-       <p>All Payments are here</p>
-      {:else if page.url.pathname === 'dashboard/users'}
-        <p>Manage Users here.</p>
-      {/if}
           {@render children()}
     </main>
   </div>
