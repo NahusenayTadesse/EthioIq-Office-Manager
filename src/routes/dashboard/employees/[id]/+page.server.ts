@@ -1,11 +1,13 @@
+
+
 import { auth } from "$lib/auth";
-import { desc, eq } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import { redirect } from "@sveltejs/kit";
-import type { LayoutServerLoad } from "./$types";
+import type { PageServerLoad } from "./$types";
 import { db } from '$lib/server/db';
 import { employees, persons } from '$lib/server/db/schema'
 
-export const load: LayoutServerLoad = async ({ request }) => {
+export const load: PageServerLoad = async ({ params, request }) => {
     const session = await auth.api.getSession({
         headers: request.headers,
     });
@@ -13,23 +15,33 @@ export const load: LayoutServerLoad = async ({ request }) => {
         redirect(302, "/login");
     }
 
+    const {id} =  params;
+
    
     try {
-       const employeeList = await db
- .select({
-    id: employees.id,
-    firstName: persons.firstName,
-    lastName: persons.lastName,
-    gender: persons.gender,
-    position: employees.position,
-    isActive: employees.isActive
-  })
+       const employee = await db
+ .select(
+    {firstName: persons.firstName,
+     lastName: persons.lastName,
+     gender: persons.gender,
+     phone: persons.phone,
+     joined: employees.hireDate,
+     salary: employees.salary,
+     birthday: persons.dateOfBirth,
+     address: persons.address,
+     position: employees.position,
+     isActive: employees.isActive
+
+
+    }
+
+ )
   .from(employees)
   .innerJoin(persons, eq(employees.personId, persons.id))
-  .where(eq(persons.type, 'employee')).orderBy(desc(employees.isActive));
+  .where(eq(employees.id, id)).then(rows => rows[0]);
 
         return {
-            employeeList,
+            employee
         };
     } catch (error) {
         console.error('Failed to load employees:', error);
@@ -38,7 +50,7 @@ export const load: LayoutServerLoad = async ({ request }) => {
         // throw error(500, 'Failed to load employees');
 
         return {
-            employeeList: [],
+            employee: [],
             error: 'Failed to load employees'
         };
     }
