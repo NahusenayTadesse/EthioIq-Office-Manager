@@ -58,7 +58,9 @@
 		"@tanstack/table-core": "^8.21.3",
 		"better-auth": "^1.2.12",
 		"drizzle-orm": "^0.40.0",
+		"jspdf": "^3.0.1",
+		"jspdf-autotable": "^5.0.2",
 		"mode-watcher": "^1.1.0",
 		"postgres": "^3.4.5"
-		}
+	}
 }

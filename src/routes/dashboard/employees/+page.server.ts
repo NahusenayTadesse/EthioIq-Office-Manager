@@ -28,8 +28,9 @@ export const load: LayoutServerLoad = async ({ request }) => {
   .innerJoin(persons, eq(employees.personId, persons.id))
   .where(eq(persons.type, 'employee')).orderBy(desc(employees.isActive));
 
+
         return {
-            employeeList,
+            employeeList
         };
     } catch (error) {
         console.error('Failed to load employees:', error);

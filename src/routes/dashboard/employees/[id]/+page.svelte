@@ -5,7 +5,7 @@
 <h1>Employee Detail</h1>
 
 
-<h1> Name: {data.employee.firstName} {data.employee.lastName}</h1>
+<h1> Name: {data.employee?.firstName} {data.employee?.lastName}</h1>
 <h1> Gender: {data.employee.gender}</h1>
 <h1> Date of Birth: {data.employee.birthday}</h1>
 <h1> Salary: {data.employee.salary} </h1>

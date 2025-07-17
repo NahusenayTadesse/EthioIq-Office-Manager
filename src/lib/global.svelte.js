@@ -4,3 +4,4 @@ export let label = "block text-sm font-medium text-gray-700 dark:text-gray-300 m
 export let input = `w-full border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-2 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition`;
 export let formContainer = `min-h-screen flex items-center justify-center bg-gray-100 dark:bg-black transition-colors`;
 export let formContainerInner = `mx-auto w-full max-w-md border border-gray-200 dark:border-gray-800 rounded-2xl shadow-xl p-8 bg-white dark:bg-gray-950 transition-colors`;
+export let select = "w-full px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-1 focus:ring-dark focus:border-dark transition duration-150"
