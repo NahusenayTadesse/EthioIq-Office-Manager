@@ -75,7 +75,7 @@ import { authClient } from "$lib/auth-client";
         class:selected={currentPage === item.name}
         href={item.href}
       > 
-        <item.icon size="20" />
+        <item.icon size="16" />
 
          {#if sidebar}
          <span> {item.name}</span>
@@ -95,7 +95,6 @@ import { authClient } from "$lib/auth-client";
       </h1>
       
       <div class="flex flex-row gap-2">
-        <img src={$session.data?.user.image} class="rounded-[50%] h-[1.6rem] w-[1.6rem]" alt="Avatar" />
       <button onclick={toggleMode}>
   <SunIcon
     class="h-[1.2rem] w-[1.2rem] scale-100 !transition-all dark:scale-0"

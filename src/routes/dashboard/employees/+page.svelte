@@ -112,6 +112,9 @@ const filtered = $derived(employeeList.filter(item => {
   
     
 </script>
+<svelte:head>
+   <title> Employees </title>
+</svelte:head>
 
     <button class="{submitButton} !w-[180px] !fixed right-4 top-24 flex flex-row gap-2 justify-center items-center !p-4" onclick={generatedPdf}> <Download /> Download PDF</button>
 
@@ -124,7 +127,7 @@ Number of Employees: {employeeList.length} <br>
 
 
 <div class="m-4">
-  <button onclick={()=> filter = !filter}><SlidersHorizontal /> </button> 
+  <button onclick={()=> filter = !filter} aria-label="Advanced Filter"><SlidersHorizontal  /> </button> 
 
   {#if filter}
   <div transition:fly={ {x:-200, duration: 600}}>
@@ -145,10 +148,10 @@ class={select}    >
       <option disabled value="">Select Gender</option>
       <option value="">All</option>
       <option value="male">Male</option>
-      <option value="female">Female</option>
+      <option value="female" >Female</option>
     </select>
 
-      <button class="{submitButton} !w-[150px] {active ? '!bg-green-500': '!bg-red-500'} m-2" onclick={() => activer()}>{active ? 'Active Only' : 'Inactive Only'}</button>
+      <button class="{submitButton} !w-[150px] {!active ? '!bg-green-500': '!bg-red-500'} m-2" onclick={() => activer()}>{active ? 'Inactive Only' : 'Active Only'}</button>
 
   </div>
 

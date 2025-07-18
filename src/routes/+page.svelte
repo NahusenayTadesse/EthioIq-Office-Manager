@@ -28,6 +28,7 @@ const handleSignUp = async () => {
 		},
 	});
 };
+
 </script>
 
 <div class="mx-auto max-w-sm border rounded-lg shadow bg-white">
