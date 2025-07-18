@@ -46,7 +46,7 @@ import { authClient } from "$lib/auth-client";
 
 <div class="flex h-screen ">
   <!-- Sidebar -->
-  <aside class="shadow-md p-2 dark:shadow-gray-300/70">
+  <aside class="shadow-md p-2 dark:shadow-gray-300/70 bg-gradient-to-bl from-white to-mentalBlue/80 dark:bg-gradient-to-r dark:from-dark dark:to-dark">
     <div class="p-4 text-2xl font-bold flex flex-row justify-between gap-8 mb-8 
     pb-8 border-b-1 border-gray-500 dark:border-white">
       {#if sidebar === true}

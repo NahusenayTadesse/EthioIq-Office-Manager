@@ -1,13 +1,16 @@
 
 <script lang='ts'>
+
+  import JSPDF from "$lib/JSPDF.svelte";
 	import { submitButton } from '$lib/global.svelte.js';
 	import { Download } from '@lucide/svelte';
     let { data } = $props();
-    import { jsPDF } from 'jspdf'
-import { autoTable } from 'jspdf-autotable'
+  
   let message = $state('');
+  
 
-const fileName = `${data.employee.firstName} ${data.employee.lastName}.pdf`;
+const fileName = `${data.employee.firstName} ${data.employee.lastName} .pdf`;
+const buttonName = `Download ${data.employee.firstName} as PDF`
   async function copyPhoneNumber(copied: string) {
     try {
       await navigator.clipboard.writeText(copied);
@@ -21,42 +24,16 @@ const fileName = `${data.employee.firstName} ${data.employee.lastName}.pdf`;
 
     }
   }
-function generatedPdf() {
-  const doc = new jsPDF();
+  
 
-  autoTable(doc, {
-    html: '#employeedetail', 
-    styles: {
-      font: 'helvetica',         
-      fontSize: 10,              
-      textColor: [40, 40, 40],   
-      halign: 'left',            
-      valign: 'middle',          
-      cellPadding: 4,            
-    },
-    headStyles: {
-      fillColor: [0, 0, 0],  
-      textColor: 255,              
-      fontStyle: 'bold',           
-    },
-    alternateRowStyles: {
-      fillColor: [245, 245, 245],  // Light gray for alternating rows
-    },
-    tableLineColor: [200, 200, 200], // Table border color
-    tableLineWidth: 0.1,            // Table border width
-    margin: { top: 20 },            // Top margin of the table
-  });
-
-  doc.save(fileName);
-}
 </script>
 <svelte:head>
    <title> {data.employee.firstName} {data.employee.lastName}</title>
 </svelte:head>
+    <JSPDF {fileName} tableId="#employeedetail" {buttonName} />
 
-    <button class="{submitButton} !w-[300px] !fixed right-4 top-24 flex flex-row gap-2 justify-center items-center !p-4" onclick={generatedPdf}> <Download /> Download {data.employee.firstName} as PDF</button>
-       <p class="text-blue-500 fixed right-24
-       top-42">{message}</p>
+
+
 
 <div class="min-h-screen py-10">
   <div class="bg-white dark:bg-dark shadow-lg dark:shadow-md dark:shadow-gray-600 rounded-md overflow-hidden max-w-3xl mx-auto">
@@ -91,6 +68,7 @@ function generatedPdf() {
           <tr>
             <td class="py-3 px-4 font-semibold">Position</td>
             <td class="py-3 px-4">{data.employee?.position}</td>
+            
           </tr>
           <tr>
             <td class="py-3 px-4 font-semibold">Hired Date</td>
@@ -98,7 +76,9 @@ function generatedPdf() {
           </tr>
           <tr>
              <td class="py-3 px-4 font-semibold">Phone</td>
-            <td class="py-3 px-4"><button onclick={()=>copyPhoneNumber(data.employee?.phone)}>{data.employee?.phone}</button> 
+            <td class="py-3 px-4"><button onclick={()=>copyPhoneNumber(data.employee?.phone)}>{data.employee?.phone}
+              <p class="text-blue-500">{message}</p>
+            </button> 
             </td>
           </tr>
           <tr>
