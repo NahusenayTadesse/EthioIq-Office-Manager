@@ -1,5 +1,5 @@
 import { auth } from "$lib/auth";
-import { desc, eq } from 'drizzle-orm';
+import { asc, eq } from 'drizzle-orm';
 import { redirect } from "@sveltejs/kit";
 import type { LayoutServerLoad } from "./$types";
 import { db } from '$lib/server/db';
@@ -26,7 +26,7 @@ export const load: LayoutServerLoad = async ({ request }) => {
   })
   .from(employees)
   .innerJoin(persons, eq(employees.personId, persons.id))
-  .where(eq(persons.type, 'employee')).orderBy(desc(employees.isActive));
+  .where(eq(persons.type, 'employee')).orderBy(asc(employees.id));
 
   const positionList = await db.select({position: employees.position}).from(employees);
 
