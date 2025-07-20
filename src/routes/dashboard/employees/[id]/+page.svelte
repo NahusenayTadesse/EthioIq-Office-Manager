@@ -2,13 +2,12 @@
 <script lang='ts'>
 
   import JSPDF from "$lib/JSPDF.svelte";
-	import { submitButton } from '$lib/global.svelte.js';
-	import { Download } from '@lucide/svelte';
+	import { LoaderCircle } from "@lucide/svelte";
+
     let { data } = $props();
   
   let message = $state('');
   
-
 const fileName = `${data.employee.firstName} ${data.employee.lastName} .pdf`;
 const buttonName = `Download ${data.employee.firstName} as PDF`
   async function copyPhoneNumber(copied: string) {
@@ -41,6 +40,17 @@ const buttonName = `Download ${data.employee.firstName} as PDF`
       <h1 class="text-3xl font-bold text-center shadow-sm">Employee Details</h1>
     </div>
     <div class="py-8 px-6">
+      {#await data}
+           <h1 class="flex flex-row m-2">     Loading Employee Data <LoaderCircle class="animate-spin" /></h1>
+
+        
+      {:then employee} 
+        
+
+
+
+
+       
       <table id="employeedetail" class="w-full table-auto text-left">
         <thead class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold uppercase tracking-wider">
           <tr>
@@ -91,6 +101,7 @@ const buttonName = `Download ${data.employee.firstName} as PDF`
           </tr>
         </tbody>
       </table>
+        {/await}
     </div>
   </div>
 </div>

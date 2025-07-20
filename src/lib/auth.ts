@@ -8,7 +8,15 @@ import { BETTER_AUTH_SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from "$env
 export const auth = betterAuth({
 	baseURL: PUBLIC_BASE_URL,
     secret: BETTER_AUTH_SECRET,
-	database: drizzleAdapter(db, {
+    trustedOrigins: [
+    "http://192.168.119.79:5173",
+    "http://172.17.48.1:5173",
+    "http://localhost:5173", 
+    "https://192.168.119.79:5173", 
+    "https://172.17.48.1:5173",
+    "https://localhost:5173",
+  ],	
+  database: drizzleAdapter(db, {
 		provider: "pg",
 	}),
 
@@ -19,7 +27,7 @@ export const auth = betterAuth({
 		},
 	},	
 
-emailAndPassword: {
+    emailAndPassword: {
 		enabled: true,
 			async sendResetPassword(url, user) {
 			console.log("Reset password url:", url);
@@ -33,6 +41,8 @@ emailAndPassword: {
 		},
 	},
 	
+    
+
 
 
 

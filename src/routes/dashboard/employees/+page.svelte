@@ -1,7 +1,7 @@
 
 <script lang='ts'>
     import { select, submitButton } from "$lib/global.svelte";
-	import { ArrowDownWideNarrow, ArrowUpWideNarrow, BrushCleaning, Mars, OctagonMinus, RotateCcw, SlidersHorizontal, Venus } from "@lucide/svelte";
+	import { ArrowDownWideNarrow, ArrowUpWideNarrow, BrushCleaning, LoaderCircle, Mars, OctagonMinus, RotateCcw, SlidersHorizontal, Venus } from "@lucide/svelte";
     import JSPDF from '$lib/JSPDF.svelte';
     import { fly } from 'svelte/transition';
 
@@ -45,7 +45,7 @@
   }
   
 const filterByProperties = (filters: { [key: string]: any }) => {
-  employeeList = data.employeeList.filter(emp =>
+  employeeList = employeeList.filter(emp =>
     Object.entries(filters).every(([key, filterValue]) => {
       // If filter value is empty, always include
       if (filterValue === '' || filterValue === null || filterValue === undefined) {
@@ -202,6 +202,11 @@ Number of Employees: {employeeList.length} <br>
       {#key componentKey}
 
        <button onclick={reloadComponent} class="aboslute right-0 top-0" aria-label="Relaod Table" title="Reload Table" > <RotateCcw  /></button>
+       {#await data}
+           <h1 class="flex flex-row m-2">     Loading Employee Data <LoaderCircle class="animate-spin" /></h1>
+
+        
+      {:then employee} 
 
   <table id="employees" class="min-w-full divide-y divide-gray-200 dark:divide-gray-200" bind:this = {table}>
     <thead class="bg-gray-100 dark:bg-black">
@@ -259,6 +264,7 @@ Number of Employees: {employeeList.length} <br>
       {/each}
     </tbody>
   </table>
+  {/await}
    {/key}
 </div>
 

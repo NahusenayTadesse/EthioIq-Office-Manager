@@ -2,6 +2,8 @@
 import { signIn } from "$lib/auth-client";
 import { writable } from "svelte/store";
 import { formContainer, formContainerInner, input, label, submitButton } from "$lib/global.svelte";
+	import { MoonIcon, SunIcon } from "@lucide/svelte";
+	import { toggleMode } from "mode-watcher";
 
 const email = writable("");
 const password = writable("");
@@ -22,11 +24,23 @@ const handleSignIn = async () => {
 };
 </script>
 
-<div class={formContainer}>
+<div class={formContainer}> 
+      
     <div class={formContainerInner}>
         <div class="mb-8 text-center">
-            <div class="flex flex-col justify-center items-center">
+            <div class="flex flex-row relative justify-center items-center">
            <img src="/ethioiq.png" class="w-1/2" alt="Ethio Iq Logo">
+             <div class="flex flex-row gap-2 absolute right-0 top-0">
+      <button onclick={toggleMode}>
+  <SunIcon
+    class="h-[1.2rem] w-[1.2rem] scale-100 !transition-all dark:scale-0"
+  />
+  <MoonIcon
+    class="h-[1.2rem] w-[1.2rem] scale-0 !transition-all dark:scale-100"
+  />
+  <span class="sr-only">Toggle theme</span>
+</button>
+</div>
            </div>
             <h2 class="text-3xl font-extrabold text-gray-900 dark:text-white mb-2">Sign in to your account</h2>
             <p class="text-gray-500 dark:text-gray-400">
@@ -65,7 +79,7 @@ const handleSignIn = async () => {
             </div>
             <button
                 type="submit"
-                class={submitButton}
+                class="{submitButton} w-full"
             >
                 Login
             </button>

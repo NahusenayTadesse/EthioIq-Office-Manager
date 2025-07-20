@@ -1,6 +1,6 @@
 
 export let submitButton = `bg-dark hover:shadow-lg text-white font-semibold py-2 rounded-md 
-shadow transition-all transform hover:scale-105 dark:bg-gray-200 dark:text-dark`;
+shadow transition-all transform hover:scale-105 dark:bg-gray-200 dark:text-dark flex flex-row justify-center items-center`;
 export let label = "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1";
 export let input = `w-full border border-gray-300 dark:border-gray-700 rounded-lg px-4 py-2 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition`;
 export let formContainer = `min-h-screen flex items-center justify-center bg-gray-100 dark:bg-black transition-colors`;
