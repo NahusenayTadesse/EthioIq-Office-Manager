@@ -30,7 +30,7 @@ export const load: LayoutServerLoad = async ({ request }) => {
 
   const positionList = await db.select({position: employees.position}).from(employees);
 
-
+   
         return {
             employeeList,
             positionList

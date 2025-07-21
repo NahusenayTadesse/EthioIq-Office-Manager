@@ -1,7 +1,7 @@
 
 <script lang='ts'>
     import { select, submitButton } from "$lib/global.svelte";
-	import { ArrowDownWideNarrow, ArrowUpWideNarrow, BrushCleaning, LoaderCircle, Mars, OctagonMinus, RotateCcw, SlidersHorizontal, Venus } from "@lucide/svelte";
+	import { ArrowDownWideNarrow, ArrowLeft, ArrowUpWideNarrow, BrushCleaning, LoaderCircle, Mars, OctagonMinus, RotateCcw, SlidersHorizontal, Venus } from "@lucide/svelte";
     import JSPDF from '$lib/JSPDF.svelte';
     import { fly } from 'svelte/transition';
 
@@ -10,13 +10,34 @@
 
    let { data } = $props();
    let employeeList = $state(data.employeeList);
-   let tableHeaders = ['Id', 'Name','Gender', 'Position', 'Active'];
+   let tableHeaders = $state([
+    
+   
+   {name:'Id', key: 'id'},
+   {name:'First Name', key: 'firstName'},
+   {name:'lastName', key: 'lastName'},
+   {name:'Gender', key: 'gender'},
+   {name:'Position', key: 'position'},
+   {name: 'Active', key: 'isActive'}
+
+  
+  
+  ]);
    let searchQuery= $state('');
    let hover = $state(false);
    let positionsList = $derived([...new Set(employeeList.map(employee => employee.position))]);
    let genders = $derived([...new Set(employeeList.map(employee => employee.gender))]);
    let filter = $state(false);
    let activeList = $derived([...new Set(employeeList.map(employee => employee.isActive))]);
+
+   let rows = $state(['id', 'firstName', 'position', 'isActive'])
+
+
+   function moveElement(fromIndex: number, toIndex: number) {
+    const element = tableHeaders.splice(fromIndex, 1)[0]; // Remove the element
+    tableHeaders.splice(toIndex, 0, element); // Insert it at the new index
+    return tableHeaders;
+} 
 
   
   let positions = $state([]);
@@ -32,9 +53,6 @@
 
 
 
-   function removeRow(index: number) {
-    table.deleteRow(index);
-  }
 
   function removeColumn(colIndex) {
     for (let row of table.rows) {
@@ -76,38 +94,30 @@ const filterByProperties = (filters: { [key: string]: any }) => {
 
 
 //Sorter
-function sorter(head: string){
+function sorter(head:string){
    if(head === '')
    return employeeList;
-  if (head === 'Id')
+  if (head === 'id')
    return employeeList.sort((a, b) => Number(a.id) - Number(b.id));
-  if(head === 'Name')
-   return employeeList.sort((a, b) => a.firstName.localeCompare(b.firstName));
-  if(head === 'Gender')
-      return employeeList.sort((a, b) => a?.gender.localeCompare(b?.gender));
-  if(head==='Position')
-       return employeeList.sort((a, b) => a.position.localeCompare(b.position));
-  if(head === 'Active')
-    employeeList.sort((a, b) => (b.isActive - a.isActive));
+  if(head === 'isActive')
+   return  employeeList.sort((a, b) => (b.isActive - a.isActive));
 
+return employeeList.sort((a,b)=> a[head].localeCompare(b[head]) )
 }
 //Reverse Sorter
 
 function sorterReverse(head: string){
    if(head === '')
    return employeeList;
-  if (head === 'Id')
+  if (head === 'id')
    return employeeList.sort((a, b) => Number(b.id) - Number(a.id));
-  if(head === 'Name')
-   return employeeList.sort((a, b) => b.firstName.localeCompare(a.firstName));
-  if(head === 'Gender')
-      return employeeList.sort((a, b) => b?.gender.localeCompare(a?.gender));
-  if(head==='Position')
-       return employeeList.sort((a, b) => b.position.localeCompare(a.position));
-  if(head === 'Active')
-    employeeList.sort((a, b) => (a.isActive - b.isActive));
+  if(head === 'isActive')
+   return  employeeList.sort((a, b) => (a.isActive - b.isActive));
 
+return employeeList.sort((a,b)=> b[head].localeCompare(a[head]) )
 }
+
+
 
 
 
@@ -123,19 +133,74 @@ function sorterReverse(head: string){
          activeStatus = false;
       }
 
-      filterByProperties({gender: gender, position: positions, isActive: activeStatus});
+      filterByProperties({gender: genders, position: positions, isActive: activeStatus});
          
  }
+function moveColumnLeftWithWrap(colIndex:number) {
+  const table = document.getElementById("employees");
+  const columnCount = table.rows[0].cells.length;
 
-    
+  // Calculate new index (wrap around if colIndex is 0)
+  const newIndex = (colIndex - 1 + columnCount) % columnCount;
+
+  // Only swap if source and destination indices are different
+  if (colIndex === newIndex) return;
+
+  swapColumns(colIndex, newIndex);
+}
+
+function swapColumns(index1, index2) {
+  const table = document.getElementById("employees");
+
+  for (const row of table.rows) {
+    // Swap the two cells (either th or td)
+    const cells = row.cells;
+    if (cells.length > Math.max(index1, index2)) {
+      row.insertBefore(cells[index2], cells[index1]);
+    }
+  }
+}
+function rotateColumnsLeft(index: number) {
+  const table = document.getElementById("employees");
+  const columnCount = table.rows[0].cells.length;
+
+  for (const row of table.rows) {
+    const cells = row.cells;
+    if (cells.length > 1) {
+      const firstCell = cells[index-1];
+      row.insertBefore(firstCell); // Moves first cell to the end
+    }
+  }
+}
+
+// Define searchable fields
+const searchableFields = ['id', 'firstName', 'lastName', 'gender', 'position'];
+
+// Filter function
+function filterEmployees(employees, query) {
+  if (!query) return employees;
+  const queryTerms = query.trim().toLowerCase().split(/\s+/).filter(term => term.length > 0);
+  if (queryTerms.length === 0) return employees;
+
+  return employees.filter(employee => {
+    // Create a virtual fullName field
+    const fullName = `${employee.firstName ?? ''} ${employee.lastName ?? ''}`.toLowerCase();
+    return queryTerms.every(term =>
+      searchableFields.some(field =>
+        String(employee[field] ?? '').toLowerCase().includes(term)
+      ) || fullName.includes(term)
+    );
+  });
+}
 </script>
 <svelte:head>
    <title> Employees </title>
 </svelte:head>
 
 
+<button onclick={()=>swapColumns(4, 0)}>Swap Name and Gender</button>
 
-
+  <button class="{submitButton} w-[150px]" onclick={()=>moveElement(2,0)}>Move</button>
 
 
     <JSPDF fileName = 'Employees' tableId="#employees" />
@@ -221,25 +286,32 @@ Number of Employees: {employeeList.length} <br>
           
             >
             <div class="flex flex-row">
-           <button onclick={() => sorter(head) } 
-             class="flex flex-row items-center justify-between"  title = "Sort with {head}" >{head} 
+           <button onclick={() => sorter(head.key) } 
+             class="flex flex-row items-center justify-between"  title = "Sort with {head.name}" >{head.name} 
         
              <ArrowDownWideNarrow class="w-[16px] {hover ? 'opacity-100': 'opacity-0'} transition-all"/>
             </button>
 
-            <button onclick={() => sorterReverse(head) } 
-             class="flex flex-row items-center justify-between"  title = "Sort with {head}" > 
+            <button onclick={() => sorterReverse(head.key) } 
+             class="flex flex-row items-center justify-between"  title = 'Reverse Sort with {head.name}' > 
         
-             <ArrowUpWideNarrow title = 'Reverse Sort with {head}' class="w-[16px] {hover ? 'opacity-100': 'opacity-0'} transition-all"/>
+             <ArrowUpWideNarrow  class="w-[16px] {hover ? 'opacity-100': 'opacity-0'} transition-all"/>
             </button>
             </div>
 
             {#if hover}
 
+            <div class="flex flex-row">
+
              <button onclick={() => removeColumn(index)} 
               class="rounded-[50%] absolute right-0 top-2" title='Cut {head} from table'>
               <OctagonMinus size=16 color='red' /></button>
+
+
+              <button onclick={()=> rotateColumnsLeft(index)} class="rounded-[50%] absolute right-0 top-6" title="Move Column to the Left"><ArrowLeft size=16 /></button>
+              </div>
               {/if}
+              
               
 
           </th>
@@ -247,21 +319,34 @@ Number of Employees: {employeeList.length} <br>
       </tr>
     </thead>
     <tbody class="bg-white dark:bg-black divide-y divide-gray-200 dark:divide-gray-200"  >
-      {#each searchQuery ? data.employeeList.filter(employee =>
-        String(employee?.id ?? '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-        String(employee?.firstName ?? '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-        String(employee?.lastName ?? '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-        String(employee?.gender ?? '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-        String(employee?.position ?? '').toLowerCase().includes(searchQuery.toLowerCase())) : employeeList as employee}
-        <tr class="hover:bg-gray-50 dark:hover:bg-dark transition-colors duration-150">
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-200">{employee.id}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-200"><a href="/dashboard/employees/{employee.id}"> {employee.firstName} {employee.lastName} </a></td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 capitalize dark:text-gray-200">{employee.gender}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-200">{employee.position}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm  {employee.isActive ? 'bg-green-400' : 'bg-red-400'} text-white">{employee.isActive ? 'Active' : 'InActive'}</td>
+        {#if filterEmployees(employeeList, searchQuery).length === 0}
+  <tr>
+    <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">
+      No employees found matching "{searchQuery}".
+    </td>
+  </tr>
+      
+       {:else}
+      {#each Object.values(filterEmployees(employeeList, searchQuery)) as employee} 
+    
+ 
+        <tr class="hover:bg-gray-50 dark:hover:bg-dark transition-colors duration-150"> 
           
+      
+        {#each Object.entries(employee) as [key, value]}
+          {#if key === 'isActive'}
+          <td class="px-6 py-4 whitespace-nowrap text-sm  {value ? 'bg-green-400' : 'bg-red-400'} text-white">{value ? 'Active' : 'InActive'}</td>
+          {:else }
+          
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-200 capitalize">{value}</td>
+                
+         {/if}
+          
+          
+          {/each}
         </tr>
       {/each}
+      {/if}
     </tbody>
   </table>
   {/await}
@@ -269,7 +354,15 @@ Number of Employees: {employeeList.length} <br>
 </div>
 
 
-   
+{#each Object.values(filterEmployees(employeeList, searchQuery)) as employee}
+  <div class="employee">
+    <ul>
+      {#each Object.entries(employee) as [key, value]}
+        <li><strong>{key}:</strong> {value}</li>
+      {/each}
+    </ul>
+  </div>
+{/each}
 
 
 

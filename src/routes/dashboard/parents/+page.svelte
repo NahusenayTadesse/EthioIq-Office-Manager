@@ -1,102 +1,76 @@
 <script>
-  import { onMount } from 'svelte';
+   import Table from '$lib/Table.svelte';
 
-  // Reactive table data
-  let tableData = [
-    ['1', '2', '3'],
-    ['4', '5', '6'],
-    ['7', '8', '9']
-  ];
+   let { data } = $props();
 
-  // Function to move a row up
-  function moveRowUp(index) {
-    if (index > 0) {
-      [tableData[index], tableData[index - 1]] = [tableData[index - 1], tableData[index]];
-      tableData = [...tableData]; // Trigger reactivity
-    }
-  }
+   let employeeList = $state(data.allEmployees);
 
-  // Function to move a row down
-  function moveRowDown(index) {
-    if (index < tableData.length - 1) {
-      [tableData[index], tableData[index + 1]] = [tableData[index + 1], tableData[index]];
-      tableData = [...tableData]; // Trigger reactivity
-    }
-  }
+   let tableHeaders = $state([
+    
+   
+   {name:'Id', key: 'id'},
+   {name:'Firs Name', key: 'firstName'},
+   {name:'lastName', key: 'lastName'},
+   {name:'Gender', key: 'gender'},
+   {name:'Position', key: 'position'},
+   {name: 'Active', key: 'isActive'}
 
-  // Function to move a column left
-  function moveColumnLeft(index) {
-    if (index > 0) {
-      tableData = tableData.map(row => {
-        [row[index], row[index - 1]] = [row[index - 1], row[index]];
-        return [...row];
+  
+  ]);
+
+
+
+  // User-defined order, maybe from UI (e.g., select/drag)
+  let columnOrder = $state(['role', 'id', 'name']);
+  let reorderedData = $derived(reorderData(employeeList, tableHeaders));
+
+  // Function to reorder keys based on columnOrder
+  function reorderData(data, order) {
+    return data.map(obj => {
+      const reordered = {};
+      order.forEach(key => {
+        if (key in obj) reordered[key] = obj[key];
       });
-    }
+      return reordered;
+    });
   }
 
-  // Function to move a column right
-  function moveColumnRight(index) {
-    if (index < tableData[0].length - 1) {
-      tableData = tableData.map(row => {
-        [row[index], row[index + 1]] = [row[index + 1], row[index]];
-        return [...row];
-      });
-    }
-  }
+  // Reactive reordered data
+  
 </script>
 
-<style>
-  table {
-    border-collapse: collapse;
-    margin: 20px 0;
-  }
-  th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: center;
-  }
-  button {
-    margin: 2px;
-    padding: 5px 10px;
-  }
-</style>
+<h2>Dynamic Table</h2>
 
-<table>
+<!-- Column controls (simulate UI) -->
+<div style="margin-bottom: 1em;">
+  <label>Column Order:
+  <select bind:value={tableHeaders} multiple>
+    {#each tableHeaders as head}
+    <option>{head.name}</option>
+    {/each}
+  </select>
+  </label>
+</div>
+
+<table border="1" cellpadding="8">
   <thead>
     <tr>
-      {#each tableData[0] as _, colIndex}
-        <th>
-          Column {colIndex + 1}
-          <div>
-            {#if colIndex > 0}
-              <button on:click={() => moveColumnLeft(colIndex)}>←</button>
-            {/if}
-            {#if colIndex < tableData[0].length - 1}
-              <button on:click={() => moveColumnRight(colIndex)}>→</button>
-            {/if}
-          </div>
-        </th>
+      {#each columnOrder as col}
+        <th>{col}</th>
       {/each}
     </tr>
   </thead>
   <tbody>
-    {#each tableData as row, rowIndex}
+    {#each reorderedData as row}
       <tr>
-        {#each row as cell, colIndex}
-          <td>{cell}</td>
+        {#each columnOrder as col}
+          <td>{row[col]}</td>
         {/each}
-        <td>
-          {#if rowIndex > 0}
-            <button on:click={() => moveRowUp(rowIndex)}>↑</button>
-          {/if}
-          {#if rowIndex < tableData.length - 1}
-            <button on:click={() => moveRowDown(rowIndex)}>↓</button>
-
-            {/if}
-
-        </td>
-        
       </tr>
-       {/each}
-      </tbody>
-      </table>
+    {/each}
+  </tbody>
+</table>
+
+
+<Table mainlist={employeeList} {tableHeaders} />
+

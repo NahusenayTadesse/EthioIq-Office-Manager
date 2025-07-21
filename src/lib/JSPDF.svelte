@@ -41,4 +41,4 @@ function generatedPdf() {
 </script>
 
 
-    <button class="{submitButton} Capitalize !fixed right-4 top-24 flex flex-row gap-2 justify-center items-center !p-4" onclick={generatedPdf}> <Download /> {buttonName}</button>
+    <button class="{submitButton} Capitalize !fixed right-4 top-24 flex flex-row gap-2 justify-center items-center !p-4 z-10" onclick={generatedPdf}> <Download /> {buttonName}</button>
