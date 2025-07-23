@@ -4,6 +4,7 @@
 	import { BrushCleaning, Mars, RotateCcw, SlidersHorizontal, Venus } from '@lucide/svelte';
 	import { fly } from 'svelte/transition';
 
+
    let { data } = $props();
 
    let parents = $state(data.allParents);
@@ -26,16 +27,19 @@
         parents = data.allParents;
  } 
 
-  let openFilter = $state(true)
+  let openFilter = $state(false)
 
   let fileName = 'Ethio IQ Parents List';
 
 
    
-function filter( key: string, value: any){
+type Parent = {
+  [key: string]: any;
+};
 
-    parents = parents.filter(person => person[key] === value);
-} 
+function filter(key: string, value: any): void {
+  parents = parents.filter((person: Parent) => person[key] === value);
+}
 
    let firstNames = $derived([...new Set(parents.map(parent => parent.firstName))]);
    let lastNames = $derived([...new Set(parents.map(parent => parent.lastName))]);
@@ -50,7 +54,7 @@ function filter( key: string, value: any){
    {key: active, name: 'Active Status', query: 'isActive'},
    {key: firstNames, name: 'First Name', query: 'firstName'},
    {key: lastNames, name: 'Last Name', query: 'lastName'},
-   {key: count, name: 'Student', query: 'studentCount'}
+   {key: count, name: 'Student Counts', query: 'studentCount'}
   
   ]);
 
@@ -60,7 +64,6 @@ function filter( key: string, value: any){
  <svelte:head>
    <title> Parents </title>
  </svelte:head>
-
 
 
 

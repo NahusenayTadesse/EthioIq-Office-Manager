@@ -29,9 +29,10 @@ const buttonName = `Download ${data.employee.firstName} as PDF`
 <svelte:head>
    <title> {data.employee.firstName} {data.employee.lastName}</title>
 </svelte:head>
+    <div class="fixed right-4 top-24">
     <JSPDF {fileName} tableId="#employeedetail" {buttonName} />
 
-
+</div>
 
 
 <div class="min-h-screen py-10">

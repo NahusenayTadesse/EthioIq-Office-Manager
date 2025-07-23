@@ -13,7 +13,6 @@
 		"db:push": "drizzle-kit push",
 		"db:migrate": "drizzle-kit migrate",
 		"db:studio": "drizzle-kit studio"
-
 	},
 	"devDependencies": {
 		"@internationalized/date": "^3.8.2",
@@ -44,6 +43,7 @@
 		"jspdf": "^3.0.1",
 		"jspdf-autotable": "^5.0.2",
 		"mode-watcher": "^1.1.0",
+		"papaparse": "^5.5.3",
 		"postgres": "^3.4.5"
 	}
 }

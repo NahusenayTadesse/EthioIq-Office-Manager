@@ -8,26 +8,3 @@ export let formContainerInner = `mx-auto w-full max-w-md border border-gray-200 
 export let select = "w-full px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-1 focus:ring-dark focus:border-dark transition duration-150"
 
 
-function filterByPropertiesInPlace<T extends object>(
-  data: T[],
-  filters: { [key: string]: any }
-): T[] {
-  const filtered = data.filter(item =>
-    Object.entries(filters).every(([key, filterValue]) => {
-      const itemValue = item[key as keyof T];
-
-      if (filterValue === '' || filterValue === null || filterValue === undefined) {
-        return true;
-      }
-
-      if (Array.isArray(filterValue)) {
-        return filterValue.includes(itemValue);
-      }
-
-      return itemValue === filterValue;
-    })
-  );
-
-  data.splice(0, data.length, ...filtered); // mutate original array
-  return data;
-}

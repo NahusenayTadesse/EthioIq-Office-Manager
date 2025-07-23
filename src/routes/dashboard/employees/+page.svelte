@@ -27,16 +27,20 @@
         employeeList = data.employeeList;
  } 
 
-  let openFilter = $state(true)
+  let openFilter = $state(false)
 
   let fileName = 'Ethio IQ Employee List';
 
 
    
-function filter( key: string, value: any){
+type Employee = {
+  [key: string]: any;
+};
 
-    employeeList = employeeList.filter(person => person[key] === value);
-} 
+
+function filter(key: string, value: any): void {
+  employeeList = employeeList.filter((person: Employee) => person[key] === value);
+}
 
    let firstNames = $derived([...new Set(employeeList.map(person => person.firstName))]);
    let lastNames = $derived([...new Set(employeeList.map(person=> person.lastName))]);

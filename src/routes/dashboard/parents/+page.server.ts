@@ -1,5 +1,5 @@
 import { auth } from "$lib/auth";
-import { desc, eq, count } from 'drizzle-orm';
+import { eq, count } from 'drizzle-orm';
 import { redirect } from "@sveltejs/kit";
 import type { LayoutServerLoad } from "./$types";
 import { db } from '$lib/server/db';

@@ -1,14 +1,20 @@
 
 <script lang='ts'>
-    import { select } from "$lib/global.svelte";
+    import { select, submitButton } from "$lib/global.svelte";
     import { page } from "$app/state";
-	import { ArrowDownWideNarrow, ArrowUpWideNarrow, BrushCleaning, LoaderCircle, Mars, OctagonMinus, RotateCcw, SlidersHorizontal, Venus } from "@lucide/svelte";
+    import {fly} from 'svelte/transition';
+	import { ArrowDown, ArrowDownWideNarrow, ArrowUp, ArrowUpWideNarrow, BrushCleaning, Download, LoaderCircle, Mars, OctagonMinus, RotateCcw, SlidersHorizontal, Venus } from "@lucide/svelte";
     import JSPDF from '$lib/JSPDF.svelte';
+      import Papa from 'papaparse';
+
     let table = $state();
+   
+  
+
     
   
 
-   let {mainlist = [{id: 1, firstName: 'Nahusenay', lastName: 'Tadesse', gender:'male', position: 'Website Developer', isActive: true}], tableHeaders = [{name:'Id', key: 'id'},
+   let { mainlist,  tableHeaders = [{name:'Id', key: 'id'},
    {name:'First Name', key: 'firstName'},
    {name:'lastName', key: 'lastName'},
    {name:'Gender', key: 'gender'},
@@ -26,13 +32,7 @@
 
 
   
- let componentKey = $state(0);
-
-      function reloadComponent() {
-        componentKey++;
-
-        list = mainlist;
-      }
+ 
 
 
 
@@ -120,19 +120,54 @@ function filterEmployees(employees, query) {
     );
   });
 }
-
  
+  function exportJSONtoCSV() {
+    const csv = Papa.unparse(mainlist);
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = fileName;
+    link.click();
+
+    URL.revokeObjectURL(url); // Clean up
+  }
+
+ let downloadDropdown = $state(false)
    
 </script>
 
+     <button onclick = {()=> downloadDropdown =  !downloadDropdown} class="{submitButton} Capitalize !fixed right-4 top-24 flex flex-row gap-2
+       justify-center items-center !p-4 z-10 !bg-transparent !text-dark !border-dark 
+       dark:!text-white !dark:!bg-transparent dark:!border-white !border-1 " >
+      Download
+      {#if downloadDropdown} <ArrowUp /> {/if} 
+      {#if !downloadDropdown} <ArrowDown /> {/if}
+      
+      </button>
 
+     {#if downloadDropdown}
 
-    <JSPDF {fileName} tableId ='#table' />
-Number of Employees: {list.length} <br>
+     <div 
+     class="p-2 border-dark dark:border-white border-1 rounded-lg flex flex-col shadow-lg fixed gap-2 top-42 right-4 z-10" transition:fly={{y:-100 }} >
+    
+      <JSPDF {fileName} tableId ='#table' />
+
+     <button onclick={exportJSONtoCSV} 
+     
+     class="{submitButton} Capitalize flex flex-row gap-2 justify-center items-center !p-4 z-10"><Download />  Download CSV</button>
+     </div>
+
+     {/if}
+
+Number of Filtered Data: {mainlist.length} <br>
 
 
 <input type="text" class="{select} !w-[200px] !placeholder:dark:text-white m-2 ml-0" bind:value={searchQuery} placeholder="Search Employees">
- <div class="overflow-x-auto rounded-lg shadow-lg border border-gray-200 dark:border-gray-200/20 relative">
+ <div 
+ class="overflow-x-auto rounded-lg shadow-lg border border-gray-200 dark:border-gray-200/20 relative">
       
        {#await mainlist}
            <h1 class="flex flex-row m-2">     Loading Data <LoaderCircle class="animate-spin" /></h1>
