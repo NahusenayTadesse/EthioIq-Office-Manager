@@ -1,9 +1,10 @@
 
 <script lang='ts'>
-    import { select, submitButton } from "$lib/global.svelte";
+    import { select, submitButton } from "$lib/global.svelte.js";
 	import { ArrowDownWideNarrow, ArrowLeft, ArrowUpWideNarrow, BrushCleaning, LoaderCircle, Mars, OctagonMinus, RotateCcw, SlidersHorizontal, Venus } from "@lucide/svelte";
     import JSPDF from '$lib/JSPDF.svelte';
     import { fly } from 'svelte/transition';
+	import Table from "$lib/Table.svelte";
 
     let table = $state();
 
@@ -54,7 +55,7 @@
 
 
 
-  function removeColumn(colIndex) {
+  function removeColumn(colIndex: number) {
     for (let row of table.rows) {
       if (row.cells.length > colIndex) {
         row.deleteCell(colIndex);
@@ -370,4 +371,4 @@ Number of Employees: {employeeList.length} <br>
 
 
 
-
+<Table mainlist = {employeeList} {tableHeaders} fileName = 'Hello'  />

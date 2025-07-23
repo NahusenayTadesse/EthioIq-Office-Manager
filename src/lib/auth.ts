@@ -9,7 +9,7 @@ export const auth = betterAuth({
 	baseURL: PUBLIC_BASE_URL,
     secret: BETTER_AUTH_SECRET,
     trustedOrigins: [
-    "http://192.168.119.79:5173",
+    "http://192.168.192.79:5173/",
     "http://172.17.48.1:5173",
     "http://localhost:5173", 
     "https://192.168.119.79:5173", 
