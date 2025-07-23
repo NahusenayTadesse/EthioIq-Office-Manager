@@ -6,7 +6,7 @@
 
    let { data } = $props();
 
-   let parents = $state(data.allEmployees);
+   let parents = $state(data.allParents);
 
    let tableHeaders = $state([
     
@@ -15,16 +15,15 @@
    {name:'First Name', key: 'firstName'},
    {name:'Last Name', key: 'lastName'},
    {name:'Gender', key: 'gender'},
-   {name:'Position', key: 'position'},
+   {name:'Student Count', key: 'studentCount'},
    {name: 'Active', key: 'isActive'}
-
   
   ]);
   let componentKey = $state(0);
 
   function reloadComponent() {
         componentKey++;
-        parents = data.allEmployees;
+        parents = data.allParents;
  } 
 
   let openFilter = $state(true)
@@ -41,7 +40,7 @@ function filter( key: string, value: any){
    let firstNames = $derived([...new Set(parents.map(parent => parent.firstName))]);
    let lastNames = $derived([...new Set(parents.map(parent => parent.lastName))]);
    let genders = $derived([...new Set(parents.map(parent => parent.gender))]);
-   let position = $derived([...new Set(parents.map(parent => parent.position))]);
+   let count= $derived([...new Set(parents.map(parent => parent.studentCount))]);
    let active = $derived([...new Set(parents.map(parent => parent.isActive))]);
   
 
@@ -51,9 +50,11 @@ function filter( key: string, value: any){
    {key: active, name: 'Active Status', query: 'isActive'},
    {key: firstNames, name: 'First Name', query: 'firstName'},
    {key: lastNames, name: 'Last Name', query: 'lastName'},
-   {key: position, name: 'Position', query: 'position'}
+   {key: count, name: 'Student', query: 'studentCount'}
   
   ]);
+
+
 </script>
 
  <svelte:head>
@@ -65,13 +66,12 @@ function filter( key: string, value: any){
 
 
 
-
 <button onclick={()=> openFilter = !openFilter} aria-label="Advanced Filter" title="Filter Table"><SlidersHorizontal  /> </button><br/>
 
   {#if openFilter}
 <div class="flex flex-col gap-2" transition:fly={{x:-200, duration: 600}}>
   
-  <button onclick={()=> parents = data.allEmployees} class="{submitButton} !w-[120px] flex flex-row gap-2 justify-center items-center" title="Clear Filter">
+  <button onclick={()=> parents = data.allParents} class="{submitButton} !w-[120px] flex flex-row gap-2 justify-center items-center" title="Clear Filter">
     <BrushCleaning size=18 /> Clear</button>
   
 
@@ -111,4 +111,3 @@ function filter( key: string, value: any){
 <button onclick={reloadComponent} class="aboslute right-0 top-0" aria-label="Relaod Table" title="Reload Table" > <RotateCcw  /></button>
 <Table mainlist={parents} {tableHeaders} {fileName} />
 {/key}
-

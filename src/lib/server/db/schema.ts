@@ -90,6 +90,7 @@ export const persons = pgTable('persons', {
   type: varchar('type', { length: 20 }).notNull(), // 'student', 'tutor', 'parent', 'employee'
   firstName: varchar('first_name', { length: 50 }).notNull(),
   lastName: varchar('last_name', { length: 50 }).notNull(),
+  grandFatherName: varchar('grand_father_name', {length: 50}),
   dateOfBirth: date('date_of_birth'),
   gender: varchar('gender', { length: 10 }),
   phone: varchar('phone', { length: 20 }),

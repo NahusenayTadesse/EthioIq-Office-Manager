@@ -1,6 +1,7 @@
 
 <script lang='ts'>
-    import { select, submitButton } from "$lib/global.svelte";
+    import { select } from "$lib/global.svelte";
+    import { page } from "$app/state";
 	import { ArrowDownWideNarrow, ArrowUpWideNarrow, BrushCleaning, LoaderCircle, Mars, OctagonMinus, RotateCcw, SlidersHorizontal, Venus } from "@lucide/svelte";
     import JSPDF from '$lib/JSPDF.svelte';
     let table = $state();
@@ -54,25 +55,37 @@
 
 
 //Sorter
-function sorter(head:string){
-   if(head === '')
-   return list;
-  if (head === 'id')
-   return list.sort((a, b) => Number(a.id) - Number(b.id));
-  if(head === 'isActive')
-   return list.sort((a, b) => (b.isActive - a.isActive));
+function sorter(head: string) {
+  if (head === '') return list;
 
-return list.sort((a,b)=> a[head].localeCompare(b[head]) )
+  const sample = list[0]?.[head];
+
+  if (typeof sample === 'number') {
+    return list.sort((a, b) => a[head] - b[head]);
+  }
+
+  if (typeof sample === 'boolean') {
+    return list.sort((a, b) => (b[head] === a[head]) ? 0 : b[head] ? 1 : -1);
+  }
+
+  return list.sort((a, b) => String(a[head]).localeCompare(String(b[head])));
 }
+
 //Reverse Sorter
 
 function sorterReverse(head: string){
    if(head === '')
    return list;
-  if (head === 'id')
-   return list.sort((a, b) => Number(b.id) - Number(a.id));
-  if(head === 'isActive')
-   return  list.sort((a, b) => (a.isActive - b.isActive));
+ const sample = list[0]?.[head];
+
+  if (typeof sample === 'number') {
+    return list.sort((a, b) => b[head] - a[head]);
+  }
+
+  if (typeof sample === 'boolean') {
+    return list.sort((a, b) => (a[head] === b[head]) ? 0 : a[head] ? 1 : -1);
+  }
+
 
 return list.sort((a,b)=> b[head].localeCompare(a[head]) )
 }
@@ -178,7 +191,7 @@ Number of Employees: {list.length} <br>
   </tr>
       
        {:else}
-      {#each Object.values(filterEmployees(list, searchQuery)) as person} 
+      {#each Object.values(filterEmployees(list, searchQuery)) as person, index} 
     
  
         <tr class="hover:bg-gray-50 dark:hover:bg-dark transition-colors duration-150"> 
@@ -187,6 +200,14 @@ Number of Employees: {list.length} <br>
         {#each Object.entries(person) as [key, value]}
           {#if key === 'isActive'}
           <td class="px-6 py-4 whitespace-nowrap text-sm  {value ? 'bg-green-400' : 'bg-red-400'} text-white">{value ? 'Active' : 'InActive'}</td>
+          {:else if key === 'id'}
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-200 capitalize">{index + 1}</td>
+          {:else if key === 'firstName' || key === 'lastName'}
+
+          
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-200 capitalize"><a href='{page.url.pathname}/{person.id}'>{value}</a></td>
+
+           
           {:else }
           
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-200 capitalize">{value}</td>

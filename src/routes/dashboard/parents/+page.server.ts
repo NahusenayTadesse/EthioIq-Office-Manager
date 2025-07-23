@@ -1,9 +1,9 @@
 import { auth } from "$lib/auth";
-import { desc, eq } from 'drizzle-orm';
+import { desc, eq, count } from 'drizzle-orm';
 import { redirect } from "@sveltejs/kit";
 import type { LayoutServerLoad } from "./$types";
 import { db } from '$lib/server/db';
-import { employees, persons } from '$lib/server/db/schema'
+import {  parents, persons, studentParentRelations } from '$lib/server/db/schema'
 
 export const load: LayoutServerLoad = async ({ request }) => {
     const session = await auth.api.getSession({
@@ -15,25 +15,31 @@ export const load: LayoutServerLoad = async ({ request }) => {
 
    
     try {
-       const allEmployees = await db
+       const allParents = await db
  .select({
-    id: employees.id,
+    id: parents.id,
     firstName: persons.firstName,
     lastName: persons.lastName,
     gender: persons.gender,
-    position: employees.position,
-    isActive: employees.isActive
+    studentCount: count(studentParentRelations.studentId).as('studentCount'),
+    isActive: parents.isActive
   })
-  .from(employees)
-  .innerJoin(persons, eq(employees.personId, persons.id))
-  .where(eq(persons.type, 'employee')).orderBy(desc(employees.isActive));
+  .from(parents)
+  .innerJoin(persons, eq(parents.personId, persons.id)) 
+  .leftJoin(studentParentRelations, eq(parents.id, studentParentRelations.parentId))
+  .groupBy(
+  parents.id,
+  persons.firstName,
+  persons.lastName,
+  persons.gender,
+  parents.isActive
+)
+  .orderBy(parents.id);
 
-  const positionList = await db.select({position: employees.position}).from(employees);
 
 
         return {
-            allEmployees,
-            positionList
+            allParents
         };
     } catch (error) {
         console.error('Failed to load employees:', error);
@@ -42,8 +48,8 @@ export const load: LayoutServerLoad = async ({ request }) => {
         // throw error(500, 'Failed to load employees');
 
         return {
-            employeeList: [],
-            error: 'Failed to load employees'
+            allParents: [],
+            error: 'Failed to load Parents'
         };
     }
 };
