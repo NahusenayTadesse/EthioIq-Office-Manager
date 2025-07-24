@@ -5,7 +5,8 @@ import { eq } from 'drizzle-orm';
 import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { db } from '$lib/server/db';
-import { employees, persons, parents, studentParentRelations } from '$lib/server/db/schema'
+import {  persons, parents, studentParentRelations, students } from '$lib/server/db/schema'
+import { LassoSelect } from "@lucide/svelte";
 
 export const load: PageServerLoad = async ({ params, request }) => {
     const session = await auth.api.getSession({
@@ -21,26 +22,41 @@ export const load: PageServerLoad = async ({ params, request }) => {
     try {
        const parent = await db
  .select(
-    {firstName: persons.firstName,
+    {
+     firstName: persons.firstName,
      lastName: persons.lastName,
      gender: persons.gender,
      phone: persons.phone,
-     salary: employees.salary,
+     notes: parents.notes,
      birthday: persons.dateOfBirth,
      address: persons.address,
-     position: employees.position,
-     isActive: employees.isActive
+     isActive: parents.isActive
+    })
+  .from(parents)
+  .innerJoin(persons, eq(parents.personId, persons.id))
+  .where(eq(parents.id, id)).then(rows => rows[0]); 
 
-
-    }
-
- )
-  .from(employees)
-  .innerJoin(persons, eq(employees.personId, persons.id))
-  .where(eq(employees.id, id)).then(rows => rows[0]);
+  const children = await db.select({
+      id: students.id,
+      firstName: persons.firstName,
+      lastName: persons.lastName,
+      dateOfBirth: persons.dateOfBirth,
+      gender: persons.gender,
+      grade: students.grade,
+      naturalOrSocial: students.naturalOrSocial,
+      school: students.school,
+      notes: students.notes,
+      isActive: students.isActive
+       
+    })
+    .from(studentParentRelations)
+    .innerJoin(students, eq(studentParentRelations.studentId, students.id))
+    .innerJoin(persons, eq(students.personId, persons.id))
+    .where(eq(studentParentRelations.parentId, id));
 
         return {
-            employee
+            parent,
+            children
         };
     } catch (error) {
         console.error('Failed to load employees:', error);
@@ -49,8 +65,10 @@ export const load: PageServerLoad = async ({ params, request }) => {
         // throw error(500, 'Failed to load employees');
 
         return {
-            employee: [],
+            parent: [],
+            children: [],
             error: 'Failed to load employees'
+            
         };
     }
 };

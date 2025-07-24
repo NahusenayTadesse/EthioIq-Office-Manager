@@ -1,65 +1,136 @@
-<script>
-  let persons = [
-    { id: 1, name: 'john doe', role: 'admin' },
-    { id: 2, name: 'jane smith', role: 'editor' },
-    { id: 3, name: 'peter jones', role: 'viewer' },
-  ];
+<script lang='ts'>
+	import { submitButton } from '$lib/global.svelte.js';
+  import Table from '$lib/Table.svelte';
+	import { BrushCleaning, Mars, RotateCcw, SlidersHorizontal, Venus } from '@lucide/svelte';
+	import { fly } from 'svelte/transition';
 
-  function mutateSingleObjectKey(obj, keyToMove, direction) {
-    const keys = Object.keys(obj);
-    const keyIndex = keys.indexOf(keyToMove);
 
-    if (keyIndex === -1) {
-      return { ...obj }; // Key not found, return a copy
-    }
+   let { data } = $props();
 
-    const newKeys = [...keys];
+   let students = $state(data.allStudents);
 
-    if (direction === 'up' && keyIndex > 0) {
-      [newKeys[keyIndex], newKeys[keyIndex - 1]] = [newKeys[keyIndex - 1], newKeys[keyIndex]];
-    } else if (direction === 'down' && keyIndex < keys.length - 1) {
-      [newKeys[keyIndex], newKeys[keyIndex + 1]] = [newKeys[keyIndex + 1], newKeys[keyIndex]];
-    }
+   let tableHeaders = $state([
+    
+   
+   {name:'Id', key: 'id'},
+   {name:'First Name', key: 'firstName'},
+   {name:'Last Name', key: 'lastName'},
+   {name:'Gender', key: 'gender'},
+   {name: 'Age', key: 'age'},
+   {name: 'Grade', key: 'grade'},   
+   {name:'Natural or Social', key: 'naturalOrSocial'},
+   {name: 'Location', key: 'location'},
+   {name: 'School', key: 'school' },
+   
+   {name: 'Notes', key: 'notes'},
+   {name: 'Active', key: 'isActive'}
+  
+  ]);
+  let componentKey = $state(0);
 
-    const newObj = {};
-    newKeys.forEach(key => {
-      if (obj.hasOwnProperty(key)) {
-        newObj[key] = obj[key];
-      }
-    });
-    return newObj;
-  }
+  function reloadComponent() {
+        componentKey++;
+        students = data.allStudents;
+ } 
 
-  function moveKeyAcrossPersons(key, direction) {
-    persons = persons.map(person => mutateSingleObjectKey(person, key, direction));
-  }
+  let openFilter = $state(false)
 
-  $: firstPersonKeys = persons.length > 0 ? Object.keys(persons[0]) : [];
+  let fileName = 'Ethio IQ Parents List';
+
+
+   
+type Parent = {
+  [key: string]: any;
+};
+
+function filter(key: string, value: any): void {
+  students = students.filter((person: Parent) => person[key] === value);
+}
+
+
+   let genders = $derived([...new Set(students.map(student => student.gender))]);
+   let naturalOrSocial = $derived([...new Set(students.map(student => student.naturalOrSocial))]);
+   let locations = $derived([...new Set(students.map(student => student.location))]);
+   let schools = $derived([...new Set(students.map(student => student.school))]);
+   let grades= $derived([...new Set(students.map(student => student.grade))]);
+
+
+   
+
+   
+   let ages = $derived([...new Set(students.map(parent => parent.age))]);
+   
+   let active = $derived([...new Set(students.map(parent => parent.isActive))]);
+  
+
+   let filterNames = $derived([ 
+    
+   {key: genders, name: 'Gender', query: 'gender'},
+   {key: grades, name: 'Grade', query: 'grade'},
+   {key: naturalOrSocial, name: 'Natural or Social', query: 'naturalOrSocial'},
+   {key: ages, name: 'Age', query: 'age'},
+   {key: schools, name: 'School', query: 'school'},
+   {key: locations, name: 'Locations', query: 'location'},
+   {key: active, name: 'Active Status', query: 'isActive'},
+  
+  ]);
+
+
 </script>
 
-<h1>Mutate Object Keys Across an Array of Persons in Svelte</h1>
+ <svelte:head>
+   <title> Parents </title>
+ </svelte:head>
 
-{#if firstPersonKeys.length > 0}
-  <div>
-    <p>Move keys for all persons:</p>
-    {#each firstPersonKeys as key}
-      {#if firstPersonKeys.indexOf(key) > 0}
-        <button on:click={() => moveKeyAcrossPersons(key, 'up')}>Move {key} Up</button>
-      {/if}
-      {#if firstPersonKeys.indexOf(key) < firstPersonKeys.length - 1}
-        <button on:click={() => moveKeyAcrossPersons(key, 'down')}>Move {key} Down</button>
-      {/if}
-    {/each}
-  </div>
-{:else}
-  <p>No persons data available.</p>
+
+
+
+
+<button onclick={()=> openFilter = !openFilter} aria-label="Advanced Filter" title="Filter Table"><SlidersHorizontal  /> </button><br/>
+
+  {#if openFilter}
+<div class="flex flex-col gap-2" transition:fly={{x:-200, duration: 600}}>
+  
+  <button onclick={()=> students = data.allStudents} class="{submitButton} !w-[120px] flex flex-row gap-2 justify-center items-center" title="Clear Filter">
+    <BrushCleaning size=18 /> Clear</button>
+  
+
+  {#each filterNames as filterName}
+  <h1 class="cap">{filterName.name}</h1>
+  <div class="flex flex-row gap-2 flex-wrap"> 
+  {#each filterName.key as filterKey}
+ <button onclick={()=> filter(filterName.query, filterKey)} 
+  
+  class="{submitButton} p-4 capitalize flex flex-row gap-2 
+  {
+  filterName.name === 'Active Status'
+    ? filterKey
+      ? '!bg-green-500'
+      : '!bg-red-500'
+    : ''
+}
+}" title="Only include Data where {filterName.name} is {filterKey}">{#if filterKey === "male"}
+  <Mars /> {/if}
+  {#if filterKey === 'female'} 
+   <Venus />  
+  {/if}
+  {filterName.name === 'Active Status'
+    ? filterKey
+      ? 'Active'
+      : 'In Active'
+    : filterKey}  </button>
+  {/each}
+ 
+</div>
+ {/each}
+ </div>
 {/if}
+<br />
+{#key componentKey}
 
-<hr />
+<button onclick={reloadComponent} class="aboslute right-0 top-0" aria-label="Relaod Table" title="Reload Table" > <RotateCcw  /></button>
+ <div class= "overflow-x-auto w-4/5">
+<Table mainlist={students} {tableHeaders} {fileName} />
+</div>
+{/key}
 
-<h2>Current Persons Data:</h2>
-{#each persons as person}
-  <div style="margin-bottom: 20px; border: 1px solid #eee; padding: 10px;">
-    <pre>{JSON.stringify(person, null, 2)}</pre>
-  </div>
-{/each}

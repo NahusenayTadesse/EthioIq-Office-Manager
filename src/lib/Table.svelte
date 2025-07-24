@@ -175,7 +175,7 @@ Number of Filtered Data: {mainlist.length} <br>
         
       {:then list} 
 
-  <table id='table' class="min-w-full divide-y divide-gray-200 dark:divide-gray-200" bind:this = {table}>
+  <table id='table' class="divide-y divide-gray-200 dark:divide-gray-200" bind:this = {table}>
     <thead class="bg-gray-100 dark:bg-black">
       <tr>
         {#each tableHeaders as head, index }
