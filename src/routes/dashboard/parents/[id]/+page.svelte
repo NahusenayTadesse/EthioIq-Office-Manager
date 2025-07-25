@@ -2,9 +2,10 @@
 <script lang='ts'>
 
   import JSPDF from "$lib/JSPDF.svelte";
-  import Table from "$lib/Table.svelte";
   import { LoaderCircle } from "@lucide/svelte";
   import ChildrenTable from "$lib/ChildrenTable.svelte";
+  import Copy from '$lib/Copy.svelte'
+	import { phoneNumber } from "better-auth/plugins";
 
     let { data } = $props();
 
@@ -29,24 +30,10 @@
 
 
   
-  let message = $state('');
   
 const fileName = `${data.parent.firstName} ${data.parent.lastName} .pdf`;
 const buttonName = `Download ${data.parent.firstName} as PDF`
-  async function copyPhoneNumber(copied: string) {
-    try {
-      await navigator.clipboard.writeText(copied);
-      message = 'Copied!';
-      setTimeout(() => (message = ''), 2000);
-
-    } catch (err) {
-      message = 'Failed to copy!';
-      console.error(err);
-      setTimeout(() => (message = ''), 2000);
-
-    }
-  }
-  
+ 
 
 </script>
 <svelte:head>
@@ -59,7 +46,7 @@ const buttonName = `Download ${data.parent.firstName} as PDF`
 
 
 <div class="min-h-screen py-10">
-  <div class="bg-white dark:bg-dark shadow-lg dark:shadow-md dark:shadow-gray-600 rounded-md overflow-hidden max-w-3xl mx-auto">
+  <div class="bg-white dark:bg-dark shadow-lg dark:shadow-md dark:shadow-gray-600 rounded-md overflow-hidden max-w-3xl">
     <div class="bg-gradient-to-r from-dark to-black text-white py-6 px-8">
       <h1 class="text-3xl font-bold text-center shadow-sm">Parent Details</h1>
     </div>
@@ -103,9 +90,8 @@ const buttonName = `Download ${data.parent.firstName} as PDF`
         
           <tr>
              <td class="py-3 px-4 font-semibold">Phone</td>
-            <td class="py-3 px-4"><button onclick={()=>copyPhoneNumber(data.parent?.phone)}>{data.parent?.phone}
-              <p class="text-blue-500">{message}</p>
-            </button> 
+            <td class="py-3 px-4"><Copy data={data.phone}  />
+            
             </td>
           </tr>
           <tr>
@@ -123,9 +109,9 @@ const buttonName = `Download ${data.parent.firstName} as PDF`
   </div>
 </div>
 
-<h1 class="text-5xl font-black text-center">Children</h1>
+<h1 class="text-4xl font-head">Students</h1>
 
  <br /> <br />
- <div class="">
+ <div class="flex flex-col flex-start">
 <ChildrenTable mainlist = {children} {tableHeaders} />
 </div>

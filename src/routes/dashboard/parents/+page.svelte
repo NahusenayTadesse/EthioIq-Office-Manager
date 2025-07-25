@@ -16,6 +16,7 @@
    {name:'First Name', key: 'firstName'},
    {name:'Last Name', key: 'lastName'},
    {name:'Gender', key: 'gender'},
+   {name: 'Phone', key: 'phone'},
    {name:'Student Count', key: 'studentCount'},
    {name: 'Active', key: 'isActive'}
   

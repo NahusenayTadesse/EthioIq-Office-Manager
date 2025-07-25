@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from "$app/state";
   import { OctagonMinus } from "@lucide/svelte";
 
      let { mainlist,  tableHeaders = [{name:'Id', key: 'id'},
@@ -76,7 +77,7 @@
           {:else if key === 'firstName' || key === 'lastName'}
 
           
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-200 capitalize"><a href='/dashboard/students/{person.id}'>{value}</a></td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-200 capitalize"><a href='/dashboard/{page.url.pathname.includes('students') ? 'parents': 'students'}/{person.id}'>{value}</a></td>
 
            
           {:else }

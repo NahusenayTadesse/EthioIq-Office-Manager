@@ -6,7 +6,6 @@ import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { db } from '$lib/server/db';
 import {  persons, parents, studentParentRelations, students } from '$lib/server/db/schema'
-import { LassoSelect } from "@lucide/svelte";
 
 export const load: PageServerLoad = async ({ params, request }) => {
     const session = await auth.api.getSession({

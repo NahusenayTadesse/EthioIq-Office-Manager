@@ -4,6 +4,7 @@ import { redirect } from "@sveltejs/kit";
 import type { LayoutServerLoad } from "./$types";
 import { db } from '$lib/server/db';
 import {  parents, persons, studentParentRelations } from '$lib/server/db/schema'
+import { phoneNumber } from "better-auth/plugins";
 
 export const load: LayoutServerLoad = async ({ request }) => {
     const session = await auth.api.getSession({
@@ -21,6 +22,7 @@ export const load: LayoutServerLoad = async ({ request }) => {
     firstName: persons.firstName,
     lastName: persons.lastName,
     gender: persons.gender,
+    phone: persons.phone,
     studentCount: count(studentParentRelations.studentId).as('studentCount'),
     isActive: parents.isActive
   })
@@ -31,6 +33,7 @@ export const load: LayoutServerLoad = async ({ request }) => {
   parents.id,
   persons.firstName,
   persons.lastName,
+  persons.phone,
   persons.gender,
   parents.isActive
 )

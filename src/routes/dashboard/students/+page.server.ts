@@ -26,6 +26,7 @@ export const load: LayoutServerLoad = async ({ request }) => {
   naturalOrSocial: students.naturalOrSocial,
   location: locations.name,
   school: schools.name, 
+  fee: students.fee,
   notes: students.notes,
   isActive: students.isActive
 })

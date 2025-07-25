@@ -21,7 +21,7 @@
    {name:'Natural or Social', key: 'naturalOrSocial'},
    {name: 'Location', key: 'location'},
    {name: 'School', key: 'school' },
-   
+   {name: 'Fee', key: 'fee'},   
    {name: 'Notes', key: 'notes'},
    {name: 'Active', key: 'isActive'}
   
@@ -53,6 +53,7 @@ function filter(key: string, value: any): void {
    let locations = $derived([...new Set(students.map(student => student.location))]);
    let schools = $derived([...new Set(students.map(student => student.school))]);
    let grades= $derived([...new Set(students.map(student => student.grade))]);
+   let fees = $derived([...new Set(students.map(student => student.fee))]);
 
 
    
@@ -70,6 +71,7 @@ function filter(key: string, value: any): void {
    {key: naturalOrSocial, name: 'Natural or Social', query: 'naturalOrSocial'},
    {key: ages, name: 'Age', query: 'age'},
    {key: schools, name: 'School', query: 'school'},
+   {key: fees, name: 'Fee', query: 'fee'},
    {key: locations, name: 'Locations', query: 'location'},
    {key: active, name: 'Active Status', query: 'isActive'},
   
@@ -79,7 +81,7 @@ function filter(key: string, value: any): void {
 </script>
 
  <svelte:head>
-   <title> Parents </title>
+   <title> Students </title>
  </svelte:head>
 
 
@@ -129,8 +131,8 @@ function filter(key: string, value: any): void {
 {#key componentKey}
 
 <button onclick={reloadComponent} class="aboslute right-0 top-0" aria-label="Relaod Table" title="Reload Table" > <RotateCcw  /></button>
- <div class= "overflow-x-auto w-4/5">
-<Table mainlist={students} {tableHeaders} {fileName} />
+ <div class= "w-[1150px] h-[600px] overflow-auto  p-2">
+ <Table mainlist = {students} {tableHeaders}  />
 </div>
 {/key}
 

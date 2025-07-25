@@ -3,9 +3,10 @@
     import { select, submitButton } from "$lib/global.svelte";
     import { page } from "$app/state";
     import {fly} from 'svelte/transition';
-	import { ArrowDown, ArrowDownWideNarrow, ArrowUp, ArrowUpWideNarrow, BrushCleaning, Download, LoaderCircle, Mars, OctagonMinus, RotateCcw, SlidersHorizontal, Venus } from "@lucide/svelte";
+    import { ArrowDown, ArrowDownWideNarrow, ArrowUp, ArrowUpWideNarrow, BrushCleaning, Download, LoaderCircle, Mars, OctagonMinus, RotateCcw, SlidersHorizontal, Venus } from "@lucide/svelte";
     import JSPDF from '$lib/JSPDF.svelte';
-      import Papa from 'papaparse';
+    import Papa from 'papaparse';
+    import Copy from "$lib/Copy.svelte";
 
     let table = $state();
    
@@ -103,19 +104,19 @@ return list.sort((a,b)=> b[head].localeCompare(a[head]) )
 
 
 // Define searchable fields
-const searchableFields = ['id', 'firstName', 'lastName', 'gender', 'position'];
+const searchableFields = ['id', 'firstName', 'lastName', 'gender', 'position', 'phone', 'grade', 'location', 'fee','naturalOrSocial', 'notes','age'];
 
 // Filter function
-function filterEmployees(employees, query) {
-  if (!query) return employees;
+function filterEmployees(persons, query) {
+  if (!query) return persons;
   const queryTerms = query.trim().toLowerCase().split(/\s+/).filter(term => term.length > 0);
-  if (queryTerms.length === 0) return employees;
+  if (queryTerms.length === 0) return persons;
 
-  return employees.filter(employee => {
-    const fullName = `${employee.firstName ?? ''} ${employee.lastName ?? ''}`.toLowerCase();
+  return persons.filter(person => {
+    const fullName = `${person.firstName ?? ''} ${person.lastName ?? ''}`.toLowerCase();
     return queryTerms.every(term =>
       searchableFields.some(field =>
-        String(employee[field] ?? '').toLowerCase().includes(term)
+        String(person[field] ?? '').toLowerCase().includes(term)
       ) || fullName.includes(term)
     );
   });
@@ -165,17 +166,17 @@ function filterEmployees(employees, query) {
 Number of Filtered Data: {mainlist.length} <br>
 
 
-<input type="text" class="{select} !w-[200px] !placeholder:dark:text-white m-2 ml-0" bind:value={searchQuery} placeholder="Search Employees">
+<input type="text" class="{select} !w-[200px] !placeholder:dark:text-white m-2 ml-0" bind:value={searchQuery} placeholder="Search...">
+
  <div 
- class="overflow-x-auto rounded-lg shadow-lg border border-gray-200 dark:border-gray-200/20 relative">
-      
+ class="rounded-lg shadow-lg border border-gray-200 dark:border-gray-200/20">      
        {#await mainlist}
            <h1 class="flex flex-row m-2">     Loading Data <LoaderCircle class="animate-spin" /></h1>
 
         
       {:then list} 
 
-  <table id='table' class="divide-y divide-gray-200 dark:divide-gray-200" bind:this = {table}>
+<table id='table' class="divide-y divide-gray-200 dark:divide-gray-200" bind:this={table}>
     <thead class="bg-gray-100 dark:bg-black">
       <tr>
         {#each tableHeaders as head, index }
@@ -221,7 +222,12 @@ Number of Filtered Data: {mainlist.length} <br>
         {#if filterEmployees(list, searchQuery).length === 0}
   <tr>
     <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">
-      No employees found matching "{searchQuery}".
+      {#if searchQuery === ''}
+        Nothing Found
+      {:else}
+      Nothing found matching "{searchQuery}"
+
+      {/if}
     </td>
   </tr>
       
@@ -242,6 +248,9 @@ Number of Filtered Data: {mainlist.length} <br>
           
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-200 capitalize"><a href='{page.url.pathname}/{person.id}'>{value}</a></td>
 
+          {:else if key === 'phone'} 
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-200 capitalize"> <Copy  data = {value} /></td>
+
            
           {:else }
           
@@ -258,8 +267,8 @@ Number of Filtered Data: {mainlist.length} <br>
   </table>
   {/await}
 
+
+
+
 </div>
-
-
-
  

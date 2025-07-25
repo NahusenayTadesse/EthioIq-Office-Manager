@@ -1,9 +1,9 @@
 import { auth } from "$lib/auth";
-import { eq } from 'drizzle-orm'
+import { eq, and, sql } from 'drizzle-orm'
 import { redirect } from "@sveltejs/kit";
 import type { LayoutServerLoad } from "./$types";
 import { db } from '$lib/server/db';
-import { roles, user } from '$lib/server/db/schema'
+import { roles, user, employees, persons } from '$lib/server/db/schema'
 
 export const load: LayoutServerLoad = async ({ request }) => {
 	const session = await auth.api.getSession({
@@ -22,16 +22,40 @@ export const load: LayoutServerLoad = async ({ request }) => {
   .then(rows => rows[0]);
 
 
-
-	const roleDetails =  await db.select({id: roles.id, name: roles.name, description: roles.description}).from(roles).where(eq(roles.id, dbUser.roleId)).then(rows => rows[0]);
+	const roleDetails =  await db.select(
+		{id: roles.id, 
+		 name: roles.name, 
+		 description: roles.description})
+		.from(roles)
+		.where(eq(roles.id, dbUser.roleId)).then(rows => rows[0]);
 	
 
+  const today = new Date();
+const month = today.getMonth() + 1; 
+const day = today.getDate();
 
+    const birthdayPerson = await db.select(
+		 {
+		 gender: persons.gender,
+		 firstName: persons.firstName, 
+		 lastName: persons.lastName,
+		 birthday: persons.dateOfBirth,
+		 type: persons.type
+		}
+	)
+	.from(persons)
+	.where(
+  and(
+    sql`EXTRACT(MONTH FROM ${persons.dateOfBirth}) = ${month}`,
+    sql`EXTRACT(DAY FROM ${persons.dateOfBirth}) = ${day}`
+  )
+);
 	
 
 	return {
 		user: session.user,
 		role: dbUser,
-		roleDetails
+		roleDetails,
+		birthdayPerson
 	};
 };
