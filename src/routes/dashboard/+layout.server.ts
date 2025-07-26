@@ -40,6 +40,7 @@ const day = today.getDate();
 		 firstName: persons.firstName, 
 		 lastName: persons.lastName,
 		 birthday: persons.dateOfBirth,
+		 phone: persons.phone,
 		 type: persons.type
 		}
 	)

@@ -58,15 +58,13 @@ export const load: PageServerLoad = async ({ params, request }) => {
             children
         };
     } catch (error) {
-        console.error('Failed to load employees:', error);
+        console.error('Failed to load parent:', error);
 
-        // Optionally, you can throw an error to show a message in the UI
-        // throw error(500, 'Failed to load employees');
 
         return {
             parent: [],
             children: [],
-            error: 'Failed to load employees'
+            error: 'Failed to load parent'
             
         };
     }

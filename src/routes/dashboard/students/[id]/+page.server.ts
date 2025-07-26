@@ -5,7 +5,7 @@ import { eq, sql } from 'drizzle-orm';
 import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { db } from '$lib/server/db';
-import {  persons, parents, studentParentRelations, students, locations, schools } from '$lib/server/db/schema'
+import {  persons, parents, studentParentRelations, tutors, students, locations, schools, tutorStudentMatches } from '$lib/server/db/schema'
 
 export const load: PageServerLoad = async ({ params, request }) => {
     const session = await auth.api.getSession({
@@ -59,10 +59,30 @@ export const load: PageServerLoad = async ({ params, request }) => {
     .innerJoin(persons, eq(parents.personId, persons.id))
     .where(eq(studentParentRelations.studentId, id));
 
+     const matches = await db.select({
+          id: tutors.id,
+          firstName: persons.firstName,
+          lastName: persons.lastName,
+          phone: persons.phone,
+          gender: persons.gender,
+          qualifications: tutors.qualifications,
+          hourlyRate: tutors.hourlyRate,
+          experience: tutors.experience,
+          matchDate: tutorStudentMatches.matchDate,
+          notes: tutors.notes,
+          isActive: tutors.isActive
+           
+        })
+        .from(tutorStudentMatches)
+        .innerJoin(tutors, eq(tutorStudentMatches.tutorId, tutors.id))
+        .innerJoin(persons, eq(tutors.personId, persons.id))
+        .where(eq(tutorStudentMatches.studentId, id));
+
         return {
             
             student,
-            parent
+            parent,
+            matches
         };
     } catch (error) {
         console.error('Failed to load parents:', error);
@@ -73,6 +93,7 @@ export const load: PageServerLoad = async ({ params, request }) => {
         return {
             parent: [],
             student: [],
+            matches: [],
             error: 'Failed to load student'
             
         };

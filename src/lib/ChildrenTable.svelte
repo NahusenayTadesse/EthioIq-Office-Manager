@@ -1,13 +1,14 @@
 <script lang="ts">
 	import { page } from "$app/state";
   import { OctagonMinus } from "@lucide/svelte";
+	import Copy from "./Copy.svelte";
 
-     let { mainlist,  tableHeaders = [{name:'Id', key: 'id'},
+     let { mainlist,  tableHeaders = [{name:'Id', key: 'id'}, 
    {name:'First Name', key: 'firstName'},
    {name:'lastName', key: 'lastName'},
    {name:'Gender', key: 'gender'},
    {name:'Position', key: 'position'},
-   {name: 'Active', key: 'isActive'}]} = $props();
+   {name: 'Active', key: 'isActive'}], link = 'students'} = $props();
    let list = $state();
    let hover = $state(false);
    let table = $state()
@@ -20,6 +21,8 @@
       }
     }
   }
+
+
 </script>
 
  
@@ -77,9 +80,12 @@
           {:else if key === 'firstName' || key === 'lastName'}
 
           
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-200 capitalize"><a href='/dashboard/{page.url.pathname.includes('students') ? 'parents': 'students'}/{person.id}'>{value}</a></td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-200 capitalize"><a href='/dashboard/{link}/{person.id}'>{value}</a></td>
 
-           
+          {:else if key === 'phone'}
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-200 capitalize">
+               <Copy data={value} />
+            </td>
           {:else }
           
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-200 capitalize">{value}</td>

@@ -96,21 +96,21 @@ import { authClient } from "$lib/auth-client";
 
   <div class="text-center mt-4 text-lg font-semibold text-gray-800">
   <div class="text-center mt-4 text-lg font-semibold text-gray-800">
+    {#if data.birthdayPerson}
      
-        
-     {#if data.birthdayPerson.length !== 0 || data.birthdayPerson[0].type === 'employee'} 
+   {#each data.birthdayPerson as birthdayPerson}
+     {#if birthdayPerson.type === 'employee'} 
     
-   <h1 class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 text-center animate-bounce">
+   <h1 class="text-4xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 text-center animate-bounce">
   🎉 Today is 
-  <span class="text-white drop-shadow-lg">
+  <span class="text-white drop-shadow-lg text-5xl">
     { data.birthdayPerson[0].firstName } { data.birthdayPerson[0].lastName }'s
   </span> 
   Birthday! 🎂
 </h1>
 {/if}
-
-
-      
+{/each}
+{/if}
 
   </div>
    

@@ -1,17 +1,14 @@
 
 <script lang='ts'>
 
-  import JSPDF from "$lib/JSPDF.svelte";
   import { LoaderCircle } from "@lucide/svelte";
   import ChildrenTable from "$lib/ChildrenTable.svelte";
-  import Copy from '$lib/Copy.svelte'
-	import { page } from "$app/state";
+	import SingleTable from "$lib/SingleTable.svelte";
 
     let { data } = $props();
-
-
     let parents = $state(data.parent);
     let student =  $state(data.student);
+    let tutors = $state(data.matches)
 
     let tableHeaders = $state([
     
@@ -43,6 +40,23 @@ let singleTable = [
     { name: 'Active Status', value: student.isActive ? 'Active' : 'Inactive' }
 ];
 
+let tutorHeaders = $state([
+    
+   
+   {name:'Id', key: 'id'},
+   {name:'First Name', key: 'firstName'},
+   {name:'Last Name', key: 'lastName'},
+   {name: 'Phone', key: 'phone'},
+   {name:'Gender', key: 'gender'},
+   {name:'Qualification', key: 'qualification'},
+   {name:'Hourly Rate', key: 'hourlyRate'},
+   {name:'Experience', key: 'Experience'},
+   {name: 'Matchdate', key: 'matchDate'},
+   {name: 'Notes', key: 'notes'},
+   {name: 'Active', key: 'isActive'}
+  
+  ]); 
+
 
 
   
@@ -55,10 +69,7 @@ const buttonName = `Download ${data.student.firstName} as PDF`
 <svelte:head>
    <title> {data.student.firstName} {data.student.lastName}</title>
 </svelte:head>
-    <div class="fixed right-2 top-24">
-    <JSPDF {fileName} tableId="#studentDetail" {buttonName} />
-
-</div>
+  
 
 
 <div class="min-h-screen py-10">
@@ -72,34 +83,9 @@ const buttonName = `Download ${data.student.firstName} as PDF`
 
         
       {:then parent} 
-        
-
-
-
-
        
-      <table id="studentDetail" class="w-full table-auto text-left">
-        <thead class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold uppercase tracking-wider">
-          <tr>
-            <th class="py-3 px-4">Detail</th>
-            <th class="py-3 px-4">Value</th>
-          </tr>
-        </thead>
-        <tbody class="text-gray-900 dark:text-gray-100">
-            {#each singleTable as value}
-          <tr>
-            <td class="py-3 px-4 font-semibold">{value.name}</td>
-            <td class="py-3 px-4 capitalize">
-                {#if value.name === 'Phone'} 
-                <Copy data={value.value} /> 
-                {:else} 
-                 {value.value}
-                {/if}</td>
-          </tr>
-             {/each}
-          
-        </tbody>
-      </table>
+          <SingleTable {singleTable} {fileName} {buttonName} />
+
         {/await}
     </div>
   </div>
@@ -109,6 +95,15 @@ const buttonName = `Download ${data.student.firstName} as PDF`
 
  <br /> <br />
  <div class="flex flex-col flex-start">
-<ChildrenTable mainlist = {parents} {tableHeaders} />
+<ChildrenTable mainlist = {parents} {tableHeaders}link='parents' />
 </div>
+
+<h1 class="text-4xl font-head">Tutors</h1>
+
+ <br /> <br />
+ <div class="flex flex-col flex-start overflow-x-auto w-[1150px] pr-2">
+<ChildrenTable mainlist = {tutors} tableHeaders = {tutorHeaders} link='tutors'/>
+</div>
+
+ 
 

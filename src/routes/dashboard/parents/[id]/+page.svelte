@@ -1,16 +1,15 @@
 
 <script lang='ts'>
 
-  import JSPDF from "$lib/JSPDF.svelte";
   import { LoaderCircle } from "@lucide/svelte";
   import ChildrenTable from "$lib/ChildrenTable.svelte";
-  import Copy from '$lib/Copy.svelte'
-	import { phoneNumber } from "better-auth/plugins";
+	import SingleTable from "$lib/SingleTable.svelte";
 
     let { data } = $props();
 
 
     let children = $state(data.children);
+    let parent = $state(data.parent);
 
     let tableHeaders = $state([
     
@@ -32,17 +31,24 @@
   
   
 const fileName = `${data.parent.firstName} ${data.parent.lastName} .pdf`;
-const buttonName = `Download ${data.parent.firstName} as PDF`
+const buttonName = `Download ${data.parent.firstName} as PDF`;
+
+
+let singleTable = [
+    { name: 'Name', value: parent.firstName + ' ' + parent.lastName },
+    { name: 'Gender', value: parent.gender },
+    { name: 'Phone', value: parent.phone }, 
+    { name: 'Address', value: parent.address },
+    { name: 'Notes', value: parent.notes },
+    { name: 'Active Status', value: parent.isActive ? 'Active' : 'Inactive' }
+];
  
 
 </script>
 <svelte:head>
    <title> {data.parent.firstName} {parent.lastName}</title>
 </svelte:head>
-    <div class="fixed left-64 top-24">
-    <JSPDF {fileName} tableId="#employeedetail" {buttonName} />
 
-</div>
 
 
 <div class="min-h-screen py-10">
@@ -57,53 +63,12 @@ const buttonName = `Download ${data.parent.firstName} as PDF`
         
       {:then parent} 
         
-
+          <SingleTable {singleTable} {fileName} {buttonName} />
 
 
 
        
-      <table id="employeedetail" class="w-full table-auto text-left">
-        <thead class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold uppercase tracking-wider">
-          <tr>
-            <th class="py-3 px-4">Detail</th>
-            <th class="py-3 px-4">Value</th>
-          </tr>
-        </thead>
-        <tbody class="text-gray-900 dark:text-gray-100">
-          <tr>
-            <td class="py-3 px-4 font-semibold">Name</td>
-            <td class="py-3 px-4">{data.parent?.firstName} {data.parent?.lastName}</td>
-          </tr>
-          <tr>
-            <td class="py-3 px-4 font-semibold">Gender</td>
-            <td class="py-3 px-4 capitalize">{data.parent?.gender}</td>
-          </tr>
-          <tr>
-            <td class="py-3 px-4 font-semibold">Date of Birth</td>
-            <td class="py-3 px-4">{data.parent?.birthday}</td>
-          </tr>
-          <tr>
-            <td class="py-3 px-4 font-semibold">Notes</td>
-            <td class="py-3 px-4"><p> {data.parent.notes}</p></td>
-            
-          </tr>
-        
-          <tr>
-             <td class="py-3 px-4 font-semibold">Phone</td>
-            <td class="py-3 px-4"><Copy data={data.phone}  />
-            
-            </td>
-          </tr>
-          <tr>
-            <td class="py-3 px-4 font-semibold">Address</td>
-            <td class="py-3 px-4">{data.parent?.address}</td>
-          </tr>
-          <tr>
-            <td class="py-3 px-4 font-semibold">Is Parent Active</td>
-            <td class="py-3 px-4">{data.parent?.isActive ? 'Yes' : 'No'}</td>
-          </tr>
-        </tbody>
-      </table>
+      
         {/await}
     </div>
   </div>
@@ -113,5 +78,5 @@ const buttonName = `Download ${data.parent.firstName} as PDF`
 
  <br /> <br />
  <div class="flex flex-col flex-start">
-<ChildrenTable mainlist = {children} {tableHeaders} />
+<ChildrenTable mainlist = {children} {tableHeaders} link='students' />
 </div>

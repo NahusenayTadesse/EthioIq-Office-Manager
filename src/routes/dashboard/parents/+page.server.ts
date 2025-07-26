@@ -45,10 +45,9 @@ export const load: LayoutServerLoad = async ({ request }) => {
             allParents
         };
     } catch (error) {
-        console.error('Failed to load employees:', error);
+        console.error('Failed to load Parents:', error);
 
-        // Optionally, you can throw an error to show a message in the UI
-        // throw error(500, 'Failed to load employees');
+      
 
         return {
             allParents: [],

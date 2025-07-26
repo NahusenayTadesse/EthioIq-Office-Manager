@@ -50,7 +50,7 @@ export const load: LayoutServerLoad = async ({ request }) => {
 
         return {
             allStudents: [],
-            error: 'Failed to load Parents'
+            error: 'Failed to load Students'
         };
     }
 };
