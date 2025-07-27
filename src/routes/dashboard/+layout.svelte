@@ -47,7 +47,16 @@ import { authClient } from "$lib/auth-client";
 <div class="flex h-screen">
   <!-- Sidebar -->
   <aside class="{sidebar ? 'w-[250px]': 'w-[70px]'} 
-  {sidebar ? 'min-w-[250px]': 'min-w-[70px]'} h-[100vh] inset-y-0 absolute top-0 bottom-0 shadow-md p-2 dark:shadow-gray-300/70 bg-gradient-to-bl from-white to-mentalBlue/80 dark:bg-gradient-to-r dark:from-dark dark:to-dark">
+  {sidebar ? 'min-w-[250px]': 'min-w-[70px]'} 
+  h-[100vh] inset-y-0 absolute 
+  top-0 bottom-0 shadow-md p-2 
+  dark:shadow-gray-300/70 bg-gradient-to-bl
+   from-white to-mentalBlue/80 dark:bg-gradient-to-r dark:from-dark dark:to-dark
+   transition-all duration-300 ease-in-out"
+  
+  onmouseenter={() => sidebar = true}
+  onmouseleave={() => sidebar = false}
+  >
     <div class="p-4 text-2xl font-bold flex flex-row justify-between gap-8 mb-8 
     pb-8 border-b-1 border-gray-500 dark:border-white">
       {#if sidebar === true}
