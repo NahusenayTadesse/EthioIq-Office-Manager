@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     let { data, children } = $props();
     import {page} from '$app/state';
 
@@ -19,7 +19,7 @@ let currentPage = $state(page.url.pathname.charAt(1).toUpperCase() + page.url.pa
   ];
 
 
-  let fileteredItems = $state([]);
+  let fileteredItems: typeof navItems = $state([]);
 
   if(data.roleDetails.name === 'Admin') {
      fileteredItems = navItems;   
@@ -140,8 +140,7 @@ import { authClient } from "$lib/auth-client";
 </div>
     </header>
 
-    <!-- Content -->
-<main class="flex flex-col p-2 flex-1 w-full {sidebar ? 'ml-[250px]' : 'ml-[80px]'} pb-16">
+<main class="flex flex-col p-2 flex-1 w-full {sidebar ? 'ml-[250px]' : 'ml-[80px]'} pb-16 transition-all duration-300 ease-in-out">
             {@render children()}
     </main>
   </div>

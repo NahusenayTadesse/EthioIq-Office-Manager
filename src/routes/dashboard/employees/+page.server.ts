@@ -1,7 +1,7 @@
 import { auth } from "$lib/auth";
 import { asc, eq } from 'drizzle-orm';
 import { redirect } from "@sveltejs/kit";
-import type { LayoutServerLoad } from "./$types";
+import type { PageServerLoad } from "./$types";
 import { db } from '$lib/server/db';
 import { employees, persons } from '$lib/server/db/schema'
 

@@ -7,7 +7,8 @@
 
     let { data } = $props();
     let matches = $state(data.matches);
-    let tutor =  $state(data.tutor);
+
+    let tutor= $state(data.tutor);
 
     let tableHeaders = $state([ 
     

@@ -265,6 +265,13 @@ Number of Filtered Data: {mainlist.length} <br>
       {/if}
     </tbody>
   </table>
+
+  {:catch error}
+  <tr>
+    <td colspan="5" class="px-6 py-4 text-center text-sm text-red-500">
+      Error loading data: {mainlist.error}
+    </td>
+  </tr>
   {/await}
 
 
