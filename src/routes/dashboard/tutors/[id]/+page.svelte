@@ -10,6 +10,8 @@
 
     let tutor= $state(data.tutor);
 
+    let subjects = $state(data.subjectforTutor);
+
     let tableHeaders = $state([ 
     
    
@@ -18,6 +20,7 @@
    {name:'Last Name', key: 'lastName'},
    {name: 'Phone', key: 'phone'},
    {name:'Gender', key: 'gender'},
+   {name:'Subject', key: 'subject'},
    {name:'Match Date', key: 'matchDate'},
    {name: 'Notes', key: 'notes'},
    {name: 'Active', key: 'isActive'}
@@ -42,7 +45,19 @@ let singleTable = [
 ];
 
 
-
+let subjectHeaders = $state([ 
+    
+   
+   {name:'Id', key: 'id'},
+   {name:'Name', key: 'name'},
+   {name:'Exerience', key: 'experience'},
+   {name:'Profeciency Level', key: 'profeciencyLevel'},
+   {name:'Grade Preference', key: 'gradePreference'},
+   {name:'Active Status', key: 'isActive'}
+   
+   
+  
+  ]); 
   
   
 const fileName = `${data.tutor.firstName} ${data.tutor.lastName} .pdf`;
@@ -81,4 +96,16 @@ const buttonName = `Download ${data.tutor.firstName} as PDF`
  <div class="flex flex-col flex-start">
 <ChildrenTable mainlist = {matches} {tableHeaders} />
 </div>
+
+
+
+
+<h1 class="text-4xl font-head my-4">Subjects</h1>
+
+ <div class="flex flex-col flex-start">
+<ChildrenTable mainlist = {subjects} tableHeaders = {subjectHeaders} />
+</div>
+
+
+
 

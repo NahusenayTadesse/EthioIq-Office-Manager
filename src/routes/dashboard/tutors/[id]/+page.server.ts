@@ -5,7 +5,7 @@ import { eq, sql } from 'drizzle-orm';
 import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { db } from '$lib/server/db';
-import {  persons, parents, tutors, students, locations, tutorStudentMatches } from '$lib/server/db/schema'
+import {  persons, parents, tutors, students, locations, tutorStudentMatches, subjectTutors, subjects } from '$lib/server/db/schema'
 
 export const load: PageServerLoad = async ({ params, request }) => {
     const session = await auth.api.getSession({
@@ -44,12 +44,28 @@ export const load: PageServerLoad = async ({ params, request }) => {
  .orderBy(tutors.id)
  .where(eq(tutors.id, id)).then(rows => rows[0]); 
 
+ const subjectforTutor = await db.select(
+    {
+        id: subjectTutors.id,
+        name: subjects.name,
+        experience: subjectTutors.experience,
+        profeciencyLevel: subjectTutors.proficiencyLevel,
+        gradePreference: subjectTutors.gradePreference,
+        isActive: subjectTutors.isActive
+    }
+
+
+ ).from(subjectTutors)
+  .innerJoin(subjects, eq(subjectTutors.subjectId, subjects.id))
+.where(eq(subjectTutors.tutorId, id));
+
   const matches = await db.select({
       id: students.id,
       firstName: persons.firstName,
       lastName: persons.lastName,
       phone: persons.phone,
       gender: persons.gender,
+      subject: subjects.name,
       matchDate: tutorStudentMatches.matchDate,
       notes: students.notes,
       isActive: students.isActive
@@ -57,13 +73,15 @@ export const load: PageServerLoad = async ({ params, request }) => {
     })
     .from(tutorStudentMatches)
     .innerJoin(students, eq(tutorStudentMatches.studentId, students.id))
+    .innerJoin(subjects, eq(subjects.id, tutorStudentMatches.subjectId))
     .innerJoin(persons, eq(students.personId, persons.id))
     .where(eq(tutorStudentMatches.tutorId, id));
 
         return {
             
          tutor,
-         matches
+         matches,
+         subjectforTutor
         };
     } catch (error) {
         console.error('Failed to load Tutor:', error);
@@ -74,6 +92,7 @@ export const load: PageServerLoad = async ({ params, request }) => {
         return {
             tutor: [],
             matches: [],
+            subjectforTutor: [],
             error: 'Failed to load Tutor'
             
         };

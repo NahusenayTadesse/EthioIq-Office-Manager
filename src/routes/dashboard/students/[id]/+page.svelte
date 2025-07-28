@@ -8,7 +8,8 @@
     let { data } = $props();
     let parents = $state(data.parent);
     let student =  $state(data.student);
-    let tutors = $state(data.matches)
+    let tutors = $state(data.matches);
+    let subjects = $state(data.subjectforStudent);
 
     let tableHeaders = $state([
     
@@ -21,6 +22,23 @@
    {name: 'Notes', key: 'notes'},
    {name: 'Primary', key: 'isPrimary'},
 
+   {name: 'Active', key: 'isActive'}
+  
+  ]); 
+
+  let subjectHeaders = $state([
+    
+   
+   {name:'Id', key: 'id'},
+   {name:'Name', key: 'name'},
+   {name:'Profieciency Level', key: 'ProfieciencyLevel'},
+   {name:'Started At', key: 'startedAt'},
+   {name:'Assesement Results', key: 'assessmentResult'},
+
+   {name:'Stopped At', key: 'stoppedAt'},
+
+   {name:'Cancel Reason', key: 'cancelReason'},
+    {name:'Notes', key: 'notes'}, 
    {name: 'Active', key: 'isActive'}
   
   ]); 
@@ -48,6 +66,7 @@ let tutorHeaders = $state([
    {name:'Last Name', key: 'lastName'},
    {name: 'Phone', key: 'phone'},
    {name:'Gender', key: 'gender'},
+   {name:'Subject', key: 'subject'},
    {name:'Qualification', key: 'qualification'},
    {name:'Hourly Rate', key: 'hourlyRate'},
    {name:'Experience', key: 'Experience'},
@@ -103,6 +122,12 @@ const buttonName = `Download ${data.student.firstName} as PDF`
  <br /> <br />
  <div class="flex flex-col flex-start overflow-x-auto w-[1150px] pr-2">
 <ChildrenTable mainlist = {tutors} tableHeaders = {tutorHeaders} link='tutors'/>
+</div>
+
+<h1 class="text-4xl font-head my-6">Subjects</h1>
+
+ <div class="flex flex-col flex-start">
+<ChildrenTable mainlist = {subjects} tableHeaders = {subjectHeaders} />
 </div>
 
  

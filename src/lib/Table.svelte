@@ -40,9 +40,9 @@
 
   function removeColumn(colIndex: number) {
     for (let row of table.rows) {
-      if (row.cells.length > colIndex) {
+
         row.deleteCell(colIndex);
-      }
+      
     }
   }
   
@@ -207,10 +207,8 @@ Number of Filtered Data: {mainlist.length} <br>
             <div class="flex flex-row">
 
              <button onclick={() => removeColumn(index)} 
-              class="rounded-[50%] absolute right-0 top-2" title='Cut {head} from table'>
+              class="rounded-[50%] absolute right-0 top-2" title='Cut {head.name} from table'>
               <OctagonMinus size=16 color='red' /></button>
-
-
               </div>
               {/if}
               
@@ -263,15 +261,19 @@ Number of Filtered Data: {mainlist.length} <br>
         </tr>
       {/each}
       {/if}
+      
+  
     </tbody>
   </table>
 
-  {:catch error}
-  <tr>
-    <td colspan="5" class="px-6 py-4 text-center text-sm text-red-500">
+   {:catch error}
+  <div>
+    <div  class="px-6 py-4 text-center text-sm text-red-500 te">
       Error loading data: {mainlist.error}
-    </td>
-  </tr>
+    </div>
+  </div>
+
+ 
   {/await}
 
 

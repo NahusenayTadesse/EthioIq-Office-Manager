@@ -5,7 +5,7 @@ import { eq, sql } from 'drizzle-orm';
 import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { db } from '$lib/server/db';
-import {  persons, parents, studentParentRelations, tutors, students, locations, schools, tutorStudentMatches } from '$lib/server/db/schema'
+import {  persons, parents, studentParentRelations, tutors, students, subjects, locations, schools, tutorStudentMatches, subjectStudents, assessmentResults } from '$lib/server/db/schema'
 
 export const load: PageServerLoad = async ({ params, request }) => {
     const session = await auth.api.getSession({
@@ -65,6 +65,7 @@ export const load: PageServerLoad = async ({ params, request }) => {
           lastName: persons.lastName,
           phone: persons.phone,
           gender: persons.gender,
+          subject: subjects.name,
           qualifications: tutors.qualifications,
           hourlyRate: tutors.hourlyRate,
           experience: tutors.experience,
@@ -75,17 +76,51 @@ export const load: PageServerLoad = async ({ params, request }) => {
         })
         .from(tutorStudentMatches)
         .innerJoin(tutors, eq(tutorStudentMatches.tutorId, tutors.id))
+        .innerJoin(subjects, eq(subjects.id, tutorStudentMatches.subjectId))
         .innerJoin(persons, eq(tutors.personId, persons.id))
         .where(eq(tutorStudentMatches.studentId, id));
+
+        const subjectforStudentRaw = await db.select({
+            id: subjectStudents.id,
+            name: subjects.name,
+            proficiencyLevel: subjectStudents.proficiencyLevel,
+            startedAt: subjectStudents.startedAt,
+            assessmentResult: assessmentResults.score,
+            stoppedAt: subjectStudents.stoppedAt,
+            cancelReason: subjectStudents.cancelReason,
+            notes: subjectStudents.notes,
+            isActive: subjectStudents.isActive
+        })
+        .from(subjectStudents)
+        .innerJoin(subjects, eq(subjectStudents.subjectId, subjects.id))
+        .leftJoin(assessmentResults, eq(subjectStudents.assessmentResultsId, assessmentResults.id))
+        .where(eq(subjectStudents.studentId, id));
+
+        // Format dates to day/month/year
+        const formatDate = (date: Date | null) => {
+            if (!date) return null;
+            const d = new Date(date);
+            const day = String(d.getDate()).padStart(2, '0');
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const year = d.getFullYear();
+            return `${day}/${month}/${year}`;
+        };
+
+        const subjectforStudent = subjectforStudentRaw.map(s => ({
+            ...s,
+            startedAt: formatDate(s.startedAt),
+            stoppedAt: formatDate(s.stoppedAt)
+        }));
 
         return {
             
             student,
             parent,
-            matches
+            matches,
+            subjectforStudent
         };
     } catch (error) {
-        console.error('Failed to load parents:', error);
+        console.error('Failed to load Student:', error);
 
         // Optionally, you can throw an error to show a message in the UI
         // throw error(500, 'Failed to load employees');
@@ -94,6 +129,7 @@ export const load: PageServerLoad = async ({ params, request }) => {
             parent: [],
             student: [],
             matches: [],
+            subjectforStudent: [],
             error: 'Failed to load student'
             
         };

@@ -180,7 +180,12 @@ export const subjectStudents = pgTable('subject_students', {
   subjectId: integer('subject_id').notNull().references(() => subjects.id),
   studentId: integer('student_id').notNull().references(() => students.id),
   proficiencyLevel: varchar('proficiency_level', { length: 50 }),
-  goals: text('goals'),
+  startedAt: timestamp('started_at').notNull().defaultNow(),
+  assessmentResultsId: integer('assessment_results_id').references(() => assessmentResults.id),
+  stoppedAt: timestamp('stopped_at'),
+  cancelReason: text('cancel_reason'),
+  notes: text('notes'),
+  isActive: boolean('is_active').notNull().default(true),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow().$onUpdate(() => new Date()),
 });
@@ -190,6 +195,9 @@ export const subjectTutors = pgTable('subject_tutors', {
   subjectId: integer('subject_id').notNull().references(() => subjects.id),
   tutorId: integer('tutor_id').notNull().references(() => tutors.id),
   proficiencyLevel: varchar('proficiency_level', { length: 50 }).notNull(),
+  experience: integer('experience').notNull(),
+  gradePreference: varchar('grade_preference', { length: 50 }),
+  notes: text('notes'),
   isActive: boolean('is_active').notNull().default(true),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow().$onUpdate(() => new Date()),
@@ -366,7 +374,7 @@ export const invoices = pgTable('invoices', {
   notes: text('notes'),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow().$onUpdate(() => new Date()),
-});
+}); 
 
 
 
@@ -377,7 +385,7 @@ export const tutorPayments = pgTable('tutor_payments', {
   amount: decimal('amount', { precision: 10, scale: 2 }).notNull(),
   invoiceId: integer('invoice_id').notNull().references(()=>invoices.id),
   month: varchar('month', { length: 20 }).notNull(),
-  paymentDate: date('payment_date').notNull().defaultNow(),
+  paymentDate: timestamp('payment_date').notNull().defaultNow(),
   paymentMethodId: integer('payment_method_id').notNull().references(() => paymentMethods.id),
   status: varchar('status', { length: 20 }).notNull(), // 'pending', 'paid', 'cancelled'
   notes: text('notes'),
@@ -402,7 +410,7 @@ export const employeePayments = pgTable('employee_payments', {
   amount: decimal('amount', { precision: 10, scale: 2 }).notNull(),
   paymentDate: date('payment_date').notNull().defaultNow(),
   paymentMethodId: integer('payment_method_id').notNull().references(() => paymentMethods.id),
-  periodStart: date('period_start').notNull(),
+  periodStart: timestamp('period_start').notNull(),
   month: varchar('month', { length: 20 }).notNull(),
   periodEnd: date('period_end').notNull(),
   status: varchar('status', { length: 20 }).notNull(), // 'pending', 'paid', 'cancelled'
@@ -484,7 +492,9 @@ export const documents = pgTable('documents', {
   uploadedBy: varchar('uploaded_by').notNull().references(() => user.id), 
   uploadedAt: timestamp('uploaded_at').notNull().defaultNow(),
   isActive: boolean('is_active').notNull().default(true),
-});
+}); 
+
+
 
 
 
