@@ -11,7 +11,7 @@
 const {fileName = pageName, tableId, buttonName="Download PDF" } = $props();
   
 function generatedPdf() {
-  const doc = new jsPDF();
+  const doc = new jsPDF({orientation: 'landscape', unit: 'pt', format: 'a4'});
 
   autoTable(doc, {
     html: tableId, 

@@ -11,6 +11,7 @@
     let tutor= $state(data.tutor);
 
     let subjects = $state(data.subjectforTutor);
+    let fields = $state(data.fields);
 
     let tableHeaders = $state([ 
     
@@ -50,7 +51,7 @@ let subjectHeaders = $state([
    
    {name:'Id', key: 'id'},
    {name:'Name', key: 'name'},
-   {name:'Exerience', key: 'experience'},
+   {name:'Experience', key: 'experience'},
    {name:'Profeciency Level', key: 'profeciencyLevel'},
    {name:'Grade Preference', key: 'gradePreference'},
    {name:'Active Status', key: 'isActive'}
@@ -58,6 +59,21 @@ let subjectHeaders = $state([
    
   
   ]); 
+
+  let fieldHeaders = $state([ 
+    
+   
+   {name:'Id', key: 'id'},
+   {name:'Name', key: 'name'},
+   {name:'GPA', key: 'gpa'},
+   {name:'Method of Study', key: 'methodOfStudy'},
+   {name:'Graduation Year', key: 'graduationYear'},
+   {name:'Degree Type', key: 'degreeType'},
+   {name:'University', key: 'university'}
+   
+  
+  ]);
+ 
   
   
 const fileName = `${data.tutor.firstName} ${data.tutor.lastName} .pdf`;
@@ -104,6 +120,12 @@ const buttonName = `Download ${data.tutor.firstName} as PDF`
 
  <div class="flex flex-col flex-start">
 <ChildrenTable mainlist = {subjects} tableHeaders = {subjectHeaders} />
+</div>
+
+<h1 class="text-4xl font-head my-4">Fields</h1>
+
+ <div class="flex flex-col flex-start">
+<ChildrenTable mainlist = {fields} tableHeaders = {fieldHeaders} />
 </div>
 
 

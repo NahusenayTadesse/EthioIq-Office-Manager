@@ -96,6 +96,10 @@ export const load: PageServerLoad = async ({ params, request }) => {
         .leftJoin(assessmentResults, eq(subjectStudents.assessmentResultsId, assessmentResults.id))
         .where(eq(subjectStudents.studentId, id));
 
+
+        
+
+
         // Format dates to day/month/year
         const formatDate = (date: Date | null) => {
             if (!date) return null;
@@ -111,6 +115,12 @@ export const load: PageServerLoad = async ({ params, request }) => {
             startedAt: formatDate(s.startedAt),
             stoppedAt: formatDate(s.stoppedAt)
         }));
+
+        const locationBranches = await db.select({
+            id: locations.id,
+            name: locations.name,
+            branches: locations.branches,
+        }).from(locations);
 
         return {
             

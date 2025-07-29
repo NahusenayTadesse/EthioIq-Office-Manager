@@ -124,6 +124,7 @@ export const tutors = pgTable('tutors', {
   location: integer('location').notNull().references(() => locations.id),
   specificLocation: text('specific_location').notNull(),
   naturalOrSocial: varchar('natural_or_social', {length: 20}),
+  entranceExamScore: integer('entrance_exam_score'),
   hourlyRate: decimal('hourly_rate', { precision: 10, scale: 2 }).notNull(),
   isActive: boolean('is_active').notNull().default(true),
   hireDate: date('hire_date'),
@@ -494,6 +495,18 @@ export const documents = pgTable('documents', {
   isActive: boolean('is_active').notNull().default(true),
 }); 
 
+export const fieldOfStudy = pgTable('field_of_study', {
+  id: serial('id').primaryKey(),
+  name: varchar('name', { length: 100 }).notNull(),
+  tutorId: integer('tutor_id').notNull().references(() => tutors.id),
+  degreeType: varchar('degree_type', {length: 50}),
+  gpa: decimal('gpa', { precision: 3, scale: 2 }),
+  methodOfStudy: varchar('method_of_study', { length: 50 }), // e.g., 'online', 'in-person'
+  graduationYear: integer('graduation_year'),
+  university: varchar('university', { length: 100 }),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow().$onUpdate(() => new Date()),
+});
 
 
 

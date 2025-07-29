@@ -54,13 +54,7 @@ function filter(key: string, value: any): void {
    let schools = $derived([...new Set(students.map(student => student.school))]);
    let grades= $derived([...new Set(students.map(student => student.grade))]);
    let fees = $derived([...new Set(students.map(student => student.fee))]);
-
-
-   
-
-   
    let ages = $derived([...new Set(students.map(parent => parent.age))]);
-   
    let active = $derived([...new Set(students.map(parent => parent.isActive))]);
   
 
@@ -131,7 +125,7 @@ function filter(key: string, value: any): void {
 {#key componentKey}
 
 <button onclick={reloadComponent} class="aboslute right-0 top-0" aria-label="Relaod Table" title="Reload Table" > <RotateCcw  /></button>
- <div class= "w-[1150px] h-[600px] overflow-auto  p-2">
+ <div class= "w-3/4 overflow-auto  p-2">
  <Table mainlist = {students} {tableHeaders}  />
 </div>
 {/key}
