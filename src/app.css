@@ -4,12 +4,6 @@
 
 @custom-variant dark (&:is(.dark *));
 
-
-
-html, body {
-  overflow-x: hidden;
-}
-
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
@@ -115,7 +109,7 @@ html, body {
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  --color-dark: #23272f;
+   --color-dark: #23272f;
   --color-mentalBlue: rgb(170, 203, 216);
   --font-head: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   --font-body: 'Roboto', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';

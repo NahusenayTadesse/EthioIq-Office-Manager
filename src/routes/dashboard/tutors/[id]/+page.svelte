@@ -4,6 +4,7 @@
   import { LoaderCircle } from "@lucide/svelte";
   import ChildrenTable from "$lib/ChildrenTable.svelte";
 	import SingleTable from "$lib/SingleTable.svelte";
+	import { submitButton } from "$lib/global.svelte.js";
 
     let { data } = $props();
     let matches = $state(data.matches);
@@ -85,6 +86,8 @@ const buttonName = `Download ${data.tutor.firstName} as PDF`
    <title> {data.tutor.firstName} {data.tutor.lastName}</title>
 </svelte:head>
   
+
+   <a href="/dashboard/tutors/{data.tutor.id}/sessions" class="{submitButton} w-[250px]">Sessions</a>
 
 
 <div class="min-h-screen py-10">

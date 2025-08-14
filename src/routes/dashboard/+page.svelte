@@ -4,6 +4,8 @@
 
 
   <script >
+	import Copy from '$lib/Copy.svelte';
+
   let { data } = $props();
 </script>
 
@@ -17,7 +19,11 @@
         </h2>
         <ul class="space-y-2">
             <li class="bg-gray-100 dark:bg-gray-800 p-4 rounded shadow-sm">
-              <p class="font-medium">{people.firstName} {people.lastName}</p>
+              <p class="font-medium">Name: {people.firstName} {people.lastName}</p> 
+              <p class="font-medium"> Phone Number: <Copy data={people.phone} /> </p>
+              <p class="font-medium"> Age: {people.age} </p>
+
+               
             </li>
         </ul>
       </div>

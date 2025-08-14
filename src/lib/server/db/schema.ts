@@ -246,7 +246,9 @@ export const tutoringSessions = pgTable('tutoring_sessions', {
   scheduledEnd: timestamp('scheduled_end').notNull(),
   actualStart: timestamp('actual_start'),
   actualEnd: timestamp('actual_end'),
-  status: varchar('status', { length: 20 }).notNull().default('scheduled'), // 'scheduled', 'completed', 'cancelled', 'no-show'
+  status: varchar('status', { length: 20 }).notNull().default('scheduled'),
+  payableHours: decimal('payable_hours', { precision: 5, scale: 2 }).notNull().default('0.00'),
+  paidStatus: boolean('paid_status').notNull().default(false), 
   notes: text('notes'),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow().$onUpdate(() => new Date()),

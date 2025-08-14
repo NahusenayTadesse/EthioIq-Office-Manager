@@ -9,7 +9,6 @@
    {name:'Gender', key: 'gender'},
    {name:'Position', key: 'position'},
    {name: 'Active', key: 'isActive'}], link = 'students'} = $props();
-   let list = $state();
    let hover = $state(false);
    let table = $state()
    

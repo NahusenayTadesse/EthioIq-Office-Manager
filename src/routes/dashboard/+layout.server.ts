@@ -41,7 +41,8 @@ const day = today.getDate();
 		 lastName: persons.lastName,
 		 birthday: persons.dateOfBirth,
 		 phone: persons.phone,
-		 type: persons.type
+		 type: persons.type,
+		 age: sql`EXTRACT(YEAR FROM AGE(${persons.dateOfBirth}))`,
 		}
 	)
 	.from(persons)

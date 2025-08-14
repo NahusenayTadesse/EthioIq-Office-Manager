@@ -59,20 +59,10 @@ import { authClient } from "$lib/auth-client";
   >
     <div class="p-4 text-2xl font-bold flex flex-row justify-between gap-8 mb-8 
     pb-8 border-b-1 border-gray-500 dark:border-white">
-      {#if sidebar === true}
+
        <a href="/dashboard">
-        <img src="/ethioiq.png" alt="Ethio IQ Logo" >
+        <img class="transition-all duration-300 ease-in-out" src={sidebar ? "/ethioiq.png" : "/favicon.png"} alt="Ethio IQ Logo" >
         </a>
-        <button onclick={()=>sidebar = false}>
-        <PanelRightOpen />
-        </button>
-      {:else} 
-       <button onclick={()=>sidebar = true} >
-         <PanelRightClose />        
-     </button>
-      {/if}
-       
-        
     </div>
     <nav class="mt-4 flex flex-col gap-4">
     {#each fileteredItems as item}
@@ -99,7 +89,9 @@ import { authClient } from "$lib/auth-client";
   <!-- Main Content -->
   <div class="flex-1 flex flex-col p-4">
     <!-- Header -->
-    <header class="{sidebar ? 'ml-[250px]' : 'ml-[80px]'} w-[1250px] shadow-md p-4 flex flex-row items-center justify-between dark:shadow-gray-300/70 rounded-lg">
+    <header class="{sidebar ? 'ml-[250px] w-[1250px]' : 'ml-[80px] w-[1425px]'} 
+    shadow-md p-4 flex flex-row items-center justify-between dark:shadow-gray-300/70 rounded-lg 
+    transition-all duration-300 ease-in-out">
       <h1 class="text-xl font-semibold">
         {(navItems.find(item => item.href === page.url.pathname)?.name) || ''}
       </h1> 

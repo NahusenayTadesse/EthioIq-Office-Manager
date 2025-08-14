@@ -5,7 +5,7 @@ import { eq, sql } from 'drizzle-orm';
 import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { db } from '$lib/server/db';
-import {  persons, parents, tutors, students, locations, tutorStudentMatches, subjectTutors, subjects, fieldOfStudy } from '$lib/server/db/schema'
+import {  persons, parents, tutors, students, locations, tutorStudentMatches, subjectTutors, subjects, fieldOfStudy, tutoringSessions } from '$lib/server/db/schema'
 
 export const load: PageServerLoad = async ({ params, request }) => {
     const session = await auth.api.getSession({
@@ -88,6 +88,10 @@ export const load: PageServerLoad = async ({ params, request }) => {
         university: fieldOfStudy.university
     }).from(fieldOfStudy)
     .where(eq(fieldOfStudy.tutorId, id));
+
+
+
+    
 
         return {
             
