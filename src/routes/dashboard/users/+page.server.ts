@@ -24,6 +24,7 @@ export const load: LayoutServerLoad = async ({ request }) => {
     emailVerified: user.emailVerified,
     isActive: user.isActive,
     
+    
   })
   .from(user)
   .leftJoin(roles, eq(user.roleId, roles.id))

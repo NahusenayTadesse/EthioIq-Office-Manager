@@ -22,6 +22,7 @@ export const load: LayoutServerLoad = async ({ request }) => {
   lastName: persons.lastName,
   gender: persons.gender,
   age: sql<number>`EXTRACT(YEAR FROM AGE(CURRENT_DATE, ${persons.dateOfBirth}))`.as('age'),
+  phone: persons.phone,
   grade: students.grade,
   naturalOrSocial: students.naturalOrSocial,
   location: locations.name,

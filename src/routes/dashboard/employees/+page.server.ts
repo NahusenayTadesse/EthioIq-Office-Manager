@@ -21,6 +21,7 @@ export const load: LayoutServerLoad = async ({ request }) => {
     firstName: persons.firstName,
     lastName: persons.lastName,
     gender: persons.gender,
+    phone: persons.phone,
     position: employees.position,
     isActive: employees.isActive
   })

@@ -15,6 +15,7 @@
    {name:'First Name', key: 'firstName'},
    {name:'Last Name', key: 'lastName'},
    {name:'Gender', key: 'gender'},
+   {name:'Phone', key: 'phone'},
    {name:'Position', key: 'position'},
    {name: 'Active', key: 'isActive'}
 

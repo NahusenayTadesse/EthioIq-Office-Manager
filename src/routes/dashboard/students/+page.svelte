@@ -17,6 +17,7 @@
    {name:'Last Name', key: 'lastName'},
    {name:'Gender', key: 'gender'},
    {name: 'Age', key: 'age'},
+   {name: 'Phone', key: 'phone'},
    {name: 'Grade', key: 'grade'},   
    {name:'Natural or Social', key: 'naturalOrSocial'},
    {name: 'Location', key: 'location'},
@@ -125,7 +126,7 @@ function filter(key: string, value: any): void {
 {#key componentKey}
 
 <button onclick={reloadComponent} class="aboslute right-0 top-0" aria-label="Relaod Table" title="Reload Table" > <RotateCcw  /></button>
- <div class= "w-3/4 overflow-auto  p-2">
+ <div class= "w-3/4 overflow-auto p-2">
  <Table mainlist = {students} {tableHeaders}  />
 </div>
 {/key}

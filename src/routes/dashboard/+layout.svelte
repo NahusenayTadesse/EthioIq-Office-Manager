@@ -48,7 +48,7 @@ import { authClient } from "$lib/auth-client";
   <!-- Sidebar -->
   <aside class="{sidebar ? 'w-[250px]': 'w-[70px]'} 
   {sidebar ? 'min-w-[250px]': 'min-w-[70px]'} 
-  h-[100vh] inset-y-0 absolute 
+  h-[100vh] inset-y-0 fixed 
   top-0 bottom-0 shadow-md p-2 
   dark:shadow-gray-300/70 bg-gradient-to-bl
    from-white to-mentalBlue/80 dark:bg-gradient-to-r dark:from-dark dark:to-dark

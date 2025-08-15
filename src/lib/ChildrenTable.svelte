@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { page } from "$app/state";
   import { OctagonMinus } from "@lucide/svelte";
 	import Copy from "./Copy.svelte";
 

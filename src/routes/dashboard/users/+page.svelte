@@ -10,6 +10,21 @@
    let users = $state(data.users);
 
 
+  
+
+   let tableHeaders = $state([
+    
+   
+   {name:'Id', key: 'id'},
+   {name:'Name', key: 'name'},
+   {name:'Email', key: 'email'},
+   {name:'Role', key: 'roleName'},
+   {name:'Email Verified', key: 'emailVerified'},
+   {name: 'Active', key: 'isActive'}
+  
+  ]);
+
+
 
   
 
@@ -21,9 +36,7 @@
  } 
 
 
-
-
-   
+let fileName = 'Ethio Iq System Users'
 
 
 

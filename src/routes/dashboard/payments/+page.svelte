@@ -1,5 +1,7 @@
 <script lang='ts'>
-  import ChildrenTable from '$lib/ChildrenTable.svelte';
+	import ChildrenTable from '$lib/ChildrenTable.svelte';
+	import Table from '$lib/Table.svelte';
+
 
 
 
@@ -14,7 +16,6 @@
    {name:'First Name', key: 'firstName'},
    {name:'Last Name', key: 'lastName'},
    {name:'Phone', key: 'phone'},
-   {name: 'Status', key: 'status' },
    {name: 'Hourly Rates', key: 'hourlyRate'},
    {name: 'Total Payable Hours', key: 'totalPayableHours'},
     {name: 'Payment', key: 'payment'},
@@ -33,12 +34,8 @@
  <svelte:head>
    <title> Payment </title>
  </svelte:head>
-
-
-
-Hello
- <div class= "w-4/5 overflow-x-auto p-2">
-    <ChildrenTable mainlist= {students} {tableHeaders} />
+ <div class= "flex flex-col flex-start">
+<ChildrenTable mainlist= {students} {tableHeaders} link="tutors" />
 </div>
 
 
