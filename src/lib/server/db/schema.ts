@@ -336,7 +336,7 @@ export const personPaymentMethods = pgTable('person_payment_methods', {
   id: serial('id').primaryKey(),
   personId: uuid('person_id').notNull().references(() => persons.id),
   paymentMethodId: integer('payment_method_id').notNull().references(() => paymentMethods.id),
-  accountNumber: integer('account_number'),
+  accountNumber: varchar('account_number', {length: 50}),
   isDefault: boolean('is_default').notNull().default(false),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow().$onUpdate(() => new Date()),

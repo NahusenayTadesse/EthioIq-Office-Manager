@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { OctagonMinus } from "@lucide/svelte";
+  import { LoaderCircle, OctagonMinus } from "@lucide/svelte";
 	import Copy from "./Copy.svelte";
 
      let { mainlist,  tableHeaders = [{name:'Id', key: 'id'}, 
@@ -23,7 +23,13 @@
 
 </script>
 
- 
+  {#await mainlist}
+           <h1 class="flex flex-row m-2">     Loading Data <LoaderCircle class="animate-spin" /></h1>
+{:then rawList}
+  <!-- normalise to a clean array -->
+  {@const mainlist = Array.isArray(rawList)
+        ? rawList.filter(Boolean)      // drop null / undefined rows
+        : []}
  <table id='table' class="w-1/2 divide-y divide-gray-200 dark:divide-gray-200 justify-self-center"  bind:this = {table}>
     <thead class="bg-gray-100 dark:bg-black">
       <tr>
@@ -84,6 +90,10 @@
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-200 capitalize">
                <Copy data={value} />
             </td>
+          {:else if key === 'bankAccount'}
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-200 capitalize">
+               <Copy data={value} />
+            </td>
           {:else }
           
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-200 capitalize">{value}</td>
@@ -97,3 +107,13 @@
       {/if}
     </tbody>
   </table>
+
+   {:catch error}
+  <div>
+    <div  class="px-6 py-4 text-center text-sm text-red-500 te">
+      Error loading data: {mainlist.error}
+    </div>
+  </div>
+
+ 
+  {/await}

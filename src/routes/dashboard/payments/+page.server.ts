@@ -4,7 +4,7 @@ import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { db } from '$lib/server/db';
 
-import {  persons, tutors, students, subjects, tutoringSessions, paymentMethods } from '$lib/server/db/schema'
+import {  persons, tutors, students, subjects, tutoringSessions, paymentMethods, personPaymentMethods } from '$lib/server/db/schema'
 
 
 export const load: PageServerLoad = async ({ request }) => {
@@ -38,10 +38,17 @@ export const load: PageServerLoad = async ({ request }) => {
     totalPayableHours: sql`SUM(COALESCE(${tutoringSessions.payableHours}, 0))`.as('totalPayableHours'),
     payment: sql`ROUND(SUM(${tutors.hourlyRate} * COALESCE(${tutoringSessions.payableHours}, 0)), 2)`.as('payment'),
     numberOfSessions: count(tutoringSessions.id).as('numberOfSessions'),
+    paymentMethod: paymentMethods.name,
+    bankAccount: personPaymentMethods.accountNumber
 })
 .from(tutoringSessions)
 .innerJoin(tutors, eq(tutoringSessions.tutorId, tutors.id))
 .innerJoin(persons, eq(tutors.personId, persons.id))
+.innerJoin(personPaymentMethods, and(
+    eq(personPaymentMethods.personId, persons.id),
+    eq(personPaymentMethods.isDefault, true)
+))
+.innerJoin(paymentMethods, eq(personPaymentMethods.paymentMethodId, paymentMethods.id))
 .where(and(
     eq(tutoringSessions.paidStatus, 'false'),
     eq(tutoringSessions.status, 'completed')
@@ -51,10 +58,10 @@ export const load: PageServerLoad = async ({ request }) => {
     persons.firstName,
     persons.lastName,
     persons.phone,
-    tutors.hourlyRate
+    tutors.hourlyRate,
+    personPaymentMethods.accountNumber,
+    paymentMethods.name
 );
-
-
         function to12Hour(dateStr: string | null) {
             if (!dateStr) return null;
             const date = new Date(dateStr);

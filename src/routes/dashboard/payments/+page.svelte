@@ -20,8 +20,8 @@
    {name: 'Total Payable Hours', key: 'totalPayableHours'},
     {name: 'Payment', key: 'payment'},
     {name: 'Number of Sessions', key: 'numberOfSessions'},
-
-  
+    {name: 'Default Payment Method', key: 'name'},
+    {name: 'Account Number', key: 'bankAccount'}
   ]);
 
  
@@ -34,7 +34,7 @@
  <svelte:head>
    <title> Payment </title>
  </svelte:head>
- <div class= "flex flex-col flex-start">
+ <div class= "flex flex-col flex-start overflow-x-auto">
 <ChildrenTable mainlist= {students} {tableHeaders} link="tutors" />
 </div>
 

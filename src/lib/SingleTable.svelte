@@ -2,15 +2,15 @@
 <script>
 
     import Copy from "$lib/Copy.svelte";
-    import JSPDF from "$lib/JSPDF.svelte"
+    // import JSPDF from "$lib/JSPDF.svelte"
 
     let { singleTable, fileName, buttonName,  } = $props();
 </script>
-
+<!-- 
  <div class="fixed right-2 top-24">
     <JSPDF {fileName} tableId="#table" {buttonName} />
 
-</div>
+</div> -->
 
 <table id="table" class="w-full table-auto text-left">
         <thead class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold uppercase tracking-wider">

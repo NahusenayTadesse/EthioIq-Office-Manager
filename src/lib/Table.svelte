@@ -246,7 +246,7 @@ Number of Filtered Data: {mainlist.length} <br>
           
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-200 capitalize"><a href='{page.url.pathname}/{person.id}'>{value}</a></td>
 
-          {:else if key === 'phone'} 
+          {:else if key === 'phone' || key === 'bankAccount'} 
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-200 capitalize"> <Copy  data = {value} /></td>
 
            

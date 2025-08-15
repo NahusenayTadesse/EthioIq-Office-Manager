@@ -8,8 +8,8 @@
   
   let message = $state('');
   
-const fileName = `${data.employee.firstName} ${data.employee.lastName} .pdf`;
-const buttonName = `Download ${data.employee.firstName} as PDF`
+// const fileName = `${data.employee.firstName} ${data.employee.lastName} .pdf`;
+// const buttonName = `Download ${data.employee.firstName} as PDF`
   async function copyPhoneNumber(copied: string) {
     try {
       await navigator.clipboard.writeText(copied);
@@ -29,10 +29,10 @@ const buttonName = `Download ${data.employee.firstName} as PDF`
 <svelte:head>
    <title> {data.employee.firstName} {data.employee.lastName}</title>
 </svelte:head>
-    <div class="fixed right-4 top-24">
+    <!-- <div class="fixed right-4 top-24">
     <JSPDF {fileName} tableId="#employeedetail" {buttonName} />
 
-</div>
+</div> -->
 
 
 <div class="min-h-screen py-10">

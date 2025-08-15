@@ -30,8 +30,8 @@
 
   
   
-const fileName = `${data.parent.firstName} ${data.parent.lastName} .pdf`;
-const buttonName = `Download ${data.parent.firstName} as PDF`;
+// const fileName = `${data.parent.firstName} ${data.parent.lastName} .pdf`;
+// const buttonName = `Download ${data.parent.firstName} as PDF`;
 
 
 let singleTable = [
@@ -63,7 +63,7 @@ let singleTable = [
         
       {:then parent} 
         
-          <SingleTable {singleTable} {fileName} {buttonName} />
+          <SingleTable {singleTable} />
 
 
 

@@ -80,8 +80,8 @@ let tutorHeaders = $state([
 
   
   
-const fileName = `${data.student.firstName} ${data.student.lastName} .pdf`;
-const buttonName = `Download ${data.student.firstName} as PDF`
+// const fileName = `${data.student.firstName} ${data.student.lastName} .pdf`;
+// const buttonName = `Download ${data.student.firstName} as PDF`
  
 
 </script>
@@ -103,7 +103,7 @@ const buttonName = `Download ${data.student.firstName} as PDF`
         
       {:then parent} 
        
-          <SingleTable {singleTable} {fileName} {buttonName} />
+          <SingleTable {singleTable} />
 
         {/await}
     </div>

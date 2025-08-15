@@ -5,7 +5,7 @@ import { eq, sql } from 'drizzle-orm';
 import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { db } from '$lib/server/db';
-import {  persons, parents, tutors, students, locations, tutorStudentMatches, subjectTutors, subjects, fieldOfStudy, tutoringSessions } from '$lib/server/db/schema'
+import {  persons, parents, tutors, students, locations, tutorStudentMatches, subjectTutors, subjects, fieldOfStudy, tutoringSessions, personPaymentMethods, paymentMethods } from '$lib/server/db/schema'
 
 export const load: PageServerLoad = async ({ params, request }) => {
     const session = await auth.api.getSession({
@@ -89,28 +89,38 @@ export const load: PageServerLoad = async ({ params, request }) => {
     }).from(fieldOfStudy)
     .where(eq(fieldOfStudy.tutorId, id));
 
+  const bankAccounts = db.select({
+    id: tutors.id,
+    name: paymentMethods.name,
+    bankAccount: personPaymentMethods.accountNumber,
+    isDefault: personPaymentMethods.isDefault
+})
+.from(personPaymentMethods)
+.innerJoin(paymentMethods, eq(personPaymentMethods.paymentMethodId, paymentMethods.id))
+.innerJoin(persons, eq(personPaymentMethods.personId, persons.id))
+.innerJoin(tutors, eq(persons.id, tutors.personId))
+.where(eq(tutors.id, id));
+
 
 
     
 
         return {
-            
          tutor,
          matches,
          subjectforTutor,
-         fields
+         fields,
+         bankAccounts
         };
     } catch (error) {
         console.error('Failed to load Tutor:', error);
-
-        // Optionally, you can throw an error to show a message in the UI
-        // throw error(500, 'Failed to load employees');
 
         return {
             tutor: [],
             matches: [],
             subjectforTutor: [],
             fields: [],
+            bankAccounts: [],
             error: 'Failed to load Tutor'
             
         };

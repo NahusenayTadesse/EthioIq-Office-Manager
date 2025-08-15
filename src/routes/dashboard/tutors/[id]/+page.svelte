@@ -5,6 +5,7 @@
   import ChildrenTable from "$lib/ChildrenTable.svelte";
 	import SingleTable from "$lib/SingleTable.svelte";
 	import { submitButton } from "$lib/global.svelte.js";
+	import Table from "$lib/Table.svelte";
 
     let { data } = $props();
     let matches = $state(data.matches);
@@ -13,6 +14,7 @@
 
     let subjects = $state(data.subjectforTutor);
     let fields = $state(data.fields);
+    let bankAccounts =  $state(data.bankAccounts);
 
     let tableHeaders = $state([ 
     
@@ -73,12 +75,21 @@ let subjectHeaders = $state([
    {name:'University', key: 'university'}
    
   
-  ]);
+  ]); 
+
+
+  let bankHeader = $state([
+     { name: 'Id', key: 'id'},
+     { name: 'Payment Method', key: 'name'},
+     { name: 'Account Number', key: 'bankAccount'},
+     { name: 'Default Account', key: 'idDefault'},
+     
+  ])
  
   
   
-const fileName = `${data.tutor.firstName} ${data.tutor.lastName} .pdf`;
-const buttonName = `Download ${data.tutor.firstName} as PDF`
+// const fileName = `${data.tutor.firstName} ${data.tutor.lastName} .pdf`;
+// const buttonName = `Download ${data.tutor.firstName} as PDF`
  
 
 </script>
@@ -102,7 +113,7 @@ const buttonName = `Download ${data.tutor.firstName} as PDF`
         
       {:then parent} 
        
-          <SingleTable {singleTable} {fileName} {buttonName} />
+          <SingleTable {singleTable} />
 
         {/await}
     </div>
@@ -130,6 +141,15 @@ const buttonName = `Download ${data.tutor.firstName} as PDF`
  <div class="flex flex-col flex-start">
 <ChildrenTable mainlist = {fields} tableHeaders = {fieldHeaders} />
 </div>
+
+ <h1 class="text-4xl font-head my-4">Bank Accounts</h1>
+
+
+ <div class="flex flex-col flex-start">
+
+<ChildrenTable mainlist = {bankAccounts} tableHeaders = {bankHeader} />
+</div>
+
 
 
 
