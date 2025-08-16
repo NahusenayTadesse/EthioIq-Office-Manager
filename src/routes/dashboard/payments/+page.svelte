@@ -1,41 +1,9 @@
-<script lang='ts'>
-	import ChildrenTable from '$lib/ChildrenTable.svelte';
-	import Table from '$lib/Table.svelte';
+ <script>
+  import { submitButton } from "$lib/global.svelte";
+ </script>
 
-
-
-
-   let { data } = $props();
-
-   let students = $state(data.tutorSessionsRaw);
-
-   let tableHeaders = $state([
-    
-   
-   {name:'Id', key: 'id'},
-   {name:'First Name', key: 'firstName'},
-   {name:'Last Name', key: 'lastName'},
-   {name:'Phone', key: 'phone'},
-   {name: 'Hourly Rates', key: 'hourlyRate'},
-   {name: 'Total Payable Hours', key: 'totalPayableHours'},
-    {name: 'Payment', key: 'payment'},
-    {name: 'Number of Sessions', key: 'numberOfSessions'},
-    {name: 'Default Payment Method', key: 'name'},
-    {name: 'Account Number', key: 'bankAccount'}
-  ]);
-
- 
- 
- 
-
-
-</script>
-
- <svelte:head>
-   <title> Payment </title>
- </svelte:head>
- <div class= "flex flex-col flex-start overflow-x-auto">
-<ChildrenTable mainlist= {students} {tableHeaders} link="tutors" />
-</div>
-
-
+    <div class="flex flex-row justify-center items-center gap-4">
+        <a href="/dashboard/payments/tutors" class="{submitButton} px-4">Tutors</a>
+        <a href="/dashboard/payments/students" class="{submitButton} px-4">Students</a>
+        
+    </div>

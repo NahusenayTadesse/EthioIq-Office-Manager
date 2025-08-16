@@ -136,7 +136,7 @@ function filterEmployees(persons, query) {
     URL.revokeObjectURL(url); // Clean up
   }
 
- let downloadDropdown = $state(false)
+ let downloadDropdown = $state(false);
    
 </script>
 
@@ -182,7 +182,7 @@ Number of Filtered Data: {mainlist.length} <br>
         {#each tableHeaders as head, index }
           <th
             scope="col"
-            class="px-6 py-3 text-left text-xs font-semibold text-gray-700
+            class="px-3 py-3 text-left text-xs font-semibold text-gray-700
              dark:text-gray-300 uppercase tracking-wider relative"
           onmouseenter={()=> hover=true}
              onmouseleave={()=>hover=false}

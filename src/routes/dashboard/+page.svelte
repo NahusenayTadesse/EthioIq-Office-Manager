@@ -8,6 +8,9 @@
 
   let { data } = $props();
 </script>
+<svelte:head>
+   <title> Dashboard </title>
+ </svelte:head>
 
 <div class="p-4 w-[550px] rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
   {#if data.birthdayPerson.length}

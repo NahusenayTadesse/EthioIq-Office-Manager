@@ -61,7 +61,7 @@ import { authClient } from "$lib/auth-client";
     pb-8 border-b-1 border-gray-500 dark:border-white">
 
        <a href="/dashboard">
-        <img class="transition-all duration-300 ease-in-out" src={sidebar ? "/ethioiq.png" : "/favicon.png"} alt="Ethio IQ Logo" >
+        <img class="transition-transform duration-300 ease-in-out" src={sidebar ? "/ethioiq.png" : "/favicon.png"} alt="Ethio IQ Logo" >
         </a>
     </div>
     <nav class="mt-4 flex flex-col gap-4">
@@ -70,7 +70,7 @@ import { authClient } from "$lib/auth-client";
         class="w-full flex flex-row items-center text-left px-4 py-2  duration-100 gap-2 dark:text-white
              rounded-lg hover:bg-gray-200 hover:dark:bg-gray-200/60
             aria-[current=page]:bg-dark aria-[current=page]:text-white dark:aria-[current=page]:bg-gray-100 
-            dark:aria-[current=page]:text-dark transition-colors" 
+            dark:aria-[current=page]:text-dark transition-all ease-in-out" 
              aria-current={page.url.pathname === item.href ? 'page' : undefined}
         class:selected={currentPage === item.name}
         href={item.href}

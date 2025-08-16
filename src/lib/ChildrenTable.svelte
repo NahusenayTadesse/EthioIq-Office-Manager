@@ -1,13 +1,14 @@
 <script lang="ts">
   import { LoaderCircle, OctagonMinus } from "@lucide/svelte";
 	import Copy from "./Copy.svelte";
+	import { select } from "./global.svelte";
 
      let { mainlist,  tableHeaders = [{name:'Id', key: 'id'}, 
    {name:'First Name', key: 'firstName'},
    {name:'lastName', key: 'lastName'},
    {name:'Gender', key: 'gender'},
    {name:'Position', key: 'position'},
-   {name: 'Active', key: 'isActive'}], link = 'students'} = $props();
+   {name: 'Active', key: 'isActive'}], link = 'students', search = false} = $props();
    let hover = $state(false);
    let table = $state()
    
@@ -19,9 +20,31 @@
       }
     }
   }
+  let searchQuery= $state('');
+  const searchableFields = ['id', 'firstName', 'lastName', 'gender', 'position', 'phone', 'grade', 'location', 'fee','naturalOrSocial', 'notes','age', 'bankAccount', 'hourlyRates', 'payment'];
+
+function filterEmployees(persons, query) {
+  if (!query) return persons;
+  const queryTerms = query.trim().toLowerCase().split(/\s+/).filter(term => term.length > 0);
+  if (queryTerms.length === 0) return persons;
+
+  return persons.filter(person => {
+    const fullName = `${person.firstName ?? ''} ${person.lastName ?? ''}`.toLowerCase();
+    return queryTerms.every(term =>
+      searchableFields.some(field =>
+        String(person[field] ?? '').toLowerCase().includes(term)
+      ) || fullName.includes(term)
+    );
+  });
+}
 
 
 </script>
+
+{#if  search}
+  <input type="text" class="{select} !w-[200px] !placeholder:dark:text-white m-2 ml-0" bind:value={searchQuery} placeholder="Search...">
+
+{/if}
 
   {#await mainlist}
            <h1 class="flex flex-row m-2">     Loading Data <LoaderCircle class="animate-spin" /></h1>
@@ -62,15 +85,15 @@
       </tr>
     </thead>
     <tbody class="bg-white dark:bg-black divide-y divide-gray-200 dark:divide-gray-200"  >
-        {#if mainlist.length === 0}
+        {#if filterEmployees(mainlist, searchQuery).length === 0}
   <tr>
     <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">
-      No children were found.
+      No data found.
     </td>
   </tr>
       
        {:else}
-      {#each Object.values(mainlist) as person, index} 
+      {#each Object.values(filterEmployees(mainlist, searchQuery)) as person, index} 
     
  
         <tr class="hover:bg-gray-50 dark:hover:bg-dark transition-colors duration-150"> 
