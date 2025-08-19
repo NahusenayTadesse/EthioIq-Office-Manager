@@ -67,7 +67,7 @@ import { authClient } from "$lib/auth-client";
     <nav class="mt-4 flex flex-col gap-4">
     {#each fileteredItems as item}
       <a
-        class="w-full flex flex-row items-center text-left px-4 py-2  duration-100 gap-2 dark:text-white
+        class="w-full flex flex-row items-center text-left px-4 py-2  duration-300 gap-2 dark:text-white
              rounded-lg hover:bg-gray-200 hover:dark:bg-gray-200/60
             aria-[current=page]:bg-dark aria-[current=page]:text-white dark:aria-[current=page]:bg-gray-100 
             dark:aria-[current=page]:text-dark transition-all ease-in-out" 

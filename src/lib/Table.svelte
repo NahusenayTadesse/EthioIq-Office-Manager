@@ -1,6 +1,6 @@
 
 <script lang='ts'>
-    import { select, submitButton } from "$lib/global.svelte";
+    import { select, submitButton, searchableFields } from "$lib/global.svelte";
     import { page } from "$app/state";
     import {fly} from 'svelte/transition';
     import { ArrowDown, ArrowDownWideNarrow, ArrowUp, ArrowUpWideNarrow, BrushCleaning, Download, LoaderCircle, Mars, OctagonMinus, RotateCcw, SlidersHorizontal, Venus } from "@lucide/svelte";
@@ -104,7 +104,6 @@ return list.sort((a,b)=> b[head].localeCompare(a[head]) )
 
 
 // Define searchable fields
-const searchableFields = ['id', 'firstName', 'lastName', 'gender', 'position', 'phone', 'grade', 'location', 'fee','naturalOrSocial', 'notes','age'];
 
 // Filter function
 function filterEmployees(persons, query) {
@@ -246,7 +245,7 @@ Number of Filtered Data: {mainlist.length} <br>
           
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-200 capitalize"><a href='{page.url.pathname}/{person.id}'>{value}</a></td>
 
-          {:else if key === 'phone' || key === 'bankAccount'} 
+          {:else if key === 'phone' || key === 'bankAccount' || key === 'parentPhone' || key === 'studentPhone'} 
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-200 capitalize"> <Copy  data = {value} /></td>
 
            

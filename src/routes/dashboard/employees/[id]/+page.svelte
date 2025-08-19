@@ -1,10 +1,22 @@
 
 <script lang='ts'>
+	import SingleTable from "$lib/SingleTable.svelte";
+  let { data } = $props();
+  let employee = $state(data.employee);
 
-  import JSPDF from "$lib/JSPDF.svelte";
-	import { LoaderCircle } from "@lucide/svelte";
+let singleTable = [
+    { name: 'Name', value: employee.firstName + ' ' + employee.lastName },
+    { name: 'Gender', value: employee.gender },
+    { name: 'Phone', value: employee.phone }, 
+    { name: 'Hired Date', value: employee.joined },
+    { name: 'Salary', value: employee.salary },
+    { name: 'Date of Birth', value: employee.birthday },
+    { name: 'Address', value: employee.address },
+    { name: 'Position', value: employee.position },
+    { name: 'Active Status', value: employee.isActive ? 'Active' : 'Inactive' }
+];
 
-    let { data } = $props();
+    
   
   let message = $state('');
   
@@ -35,12 +47,15 @@
 </div> -->
 
 
-<div class="min-h-screen py-10">
-  <div class="bg-white dark:bg-dark shadow-lg dark:shadow-md dark:shadow-gray-600 rounded-md overflow-hidden max-w-3xl mx-auto">
-    <div class="bg-gradient-to-r from-dark to-black text-white py-6 px-8">
-      <h1 class="text-3xl font-bold text-center shadow-sm">Employee Details</h1>
+<div class="min-h-screen py-10 flex flex-start">
+  <div class="bg-white dark:bg-dark shadow-lg dark:shadow-md dark:shadow-gray-600 rounded-md min-w-3xl">
+    <div class="bg-gradient-to-r from-dark to-black text-white py-6 px-8 rounded-lg">
+      <h1 class="text-center">Employee Details</h1>
     </div>
-    <div class="py-8 px-6">
+      <SingleTable {singleTable}/>
+    </div>
+</div>
+    <!-- <div class="py-8 px-6">
       {#await data}
            <h1 class="flex flex-row m-2">     Loading Employee Data <LoaderCircle class="animate-spin" /></h1>
 
@@ -105,4 +120,4 @@
         {/await}
     </div>
   </div>
-</div>
+</div> -->

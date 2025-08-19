@@ -14,7 +14,11 @@
    {name:'Id', key: 'id'},
    {name:'First Name', key: 'firstName'},
    {name:'Last Name', key: 'lastName'},
-   {name:'Phone', key: 'phone'},
+   {name:'Student Phone', key: 'phone'},
+   {name:'Parent First Name', key: ''},
+   {name:'Parent Last Name', key: ''},
+   {name:'Parent Phone', key: ''},
+
    {name: 'Hourly Rates', key: 'hourlyRate'},
    {name: 'Total Hours tutored', key: 'totalRecurredFees'},
     {name: 'Payment', key: 'payment'},

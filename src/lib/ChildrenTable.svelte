@@ -1,7 +1,8 @@
 <script lang="ts">
   import { LoaderCircle, OctagonMinus } from "@lucide/svelte";
 	import Copy from "./Copy.svelte";
-	import { select } from "./global.svelte";
+	import { select, searchableFields } from "./global.svelte";
+  
 
      let { mainlist,  tableHeaders = [{name:'Id', key: 'id'}, 
    {name:'First Name', key: 'firstName'},
@@ -21,7 +22,7 @@
     }
   }
   let searchQuery= $state('');
-  const searchableFields = ['id', 'firstName', 'lastName', 'gender', 'position', 'phone', 'grade', 'location', 'fee','naturalOrSocial', 'notes','age', 'bankAccount', 'hourlyRates', 'payment'];
+  
 
 function filterEmployees(persons, query) {
   if (!query) return persons;
@@ -108,8 +109,13 @@ function filterEmployees(persons, query) {
 
           
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-200 capitalize"><a href='/dashboard/{link}/{person.id}'>{value}</a></td>
+           {:else if key === 'studentFirstName' || key === 'studentLastName'}
 
-          {:else if key === 'phone'}
+          
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-200 capitalize"><a href='/dashboard/students/{person.id}'>{value}</a></td>
+           
+
+          {:else if key === 'phone' || key === 'parentPhone' || key === 'studentPhone'}
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-200 capitalize">
                <Copy data={value} />
             </td>

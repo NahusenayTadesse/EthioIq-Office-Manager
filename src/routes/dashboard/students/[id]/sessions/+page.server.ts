@@ -21,7 +21,7 @@ export const load: PageServerLoad = async ({ params, request }) => {
 
         const tutorSessionsRaw = await db.select(
             {
-            id: students.id,
+            id: tutors.id,
             firstName: persons.firstName,
             lastName: persons.lastName,
             phone: persons.phone,
@@ -37,8 +37,8 @@ export const load: PageServerLoad = async ({ params, request }) => {
         .innerJoin(tutors, eq(tutoringSessions.tutorId, tutors.id))
         .innerJoin(students, eq(tutoringSessions.studentId, students.id))
         .innerJoin(subjects, eq(tutoringSessions.subjectId, subjects.id))
-        .innerJoin(persons, eq(students.personId, persons.id))
-        .where(eq(tutoringSessions.tutorId, id));
+        .innerJoin(persons, eq(tutors.personId, persons.id))
+        .where(eq(tutoringSessions.studentId, id));
 
         // Helper to format date to 12-hour time
         function to12Hour(dateStr: string | null) {

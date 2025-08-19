@@ -2,6 +2,7 @@
 <script lang='ts'>
 
   import { LoaderCircle } from "@lucide/svelte";
+  import { submitButton } from "$lib/global.svelte.js";
   import ChildrenTable from "$lib/ChildrenTable.svelte";
 	import SingleTable from "$lib/SingleTable.svelte";
 
@@ -88,6 +89,9 @@ let tutorHeaders = $state([
 <svelte:head>
    <title> {data.student.firstName} {data.student.lastName}</title>
 </svelte:head>
+
+   <a href="/dashboard/tutors/{data.student.id}/sessions" class="{submitButton} w-[250px]">Sessions</a>
+
   
 
 

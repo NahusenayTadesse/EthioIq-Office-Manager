@@ -22,13 +22,13 @@
 </script>
 
 <div class="flex flex-col justify-start items-start">
-    <h1 class="text-2xl font-bold mb-4">Tutoring Sessions for {data.tutor.firstName} {data.tutor.lastName}</h1>
+    <h1 class="text-2xl font-bold mb-4">Tutoring Sessions for {data.student.firstName} {data.student.lastName}</h1>
     
     {#if tutorSessions.length ===  0}
         <p class="text-gray-500 dark:text-gray-100">No sessions found for this tutor.</p>
     {:else}
        <div class="overflow-x-auto flex flex-start flex-col">
-           <ChildrenTable mainlist={tutorSessions} {tableHeaders} link='students' search=true />
+           <ChildrenTable mainlist={tutorSessions} {tableHeaders} link='tutors' search=true />
        </div>
     {/if}
 

@@ -4,13 +4,19 @@
     import Copy from "$lib/Copy.svelte";
     // import JSPDF from "$lib/JSPDF.svelte"
 
-    let { singleTable, fileName, buttonName,  } = $props();
+    let { singleTable  } = $props();
 </script>
 <!-- 
  <div class="fixed right-2 top-24">
     <JSPDF {fileName} tableId="#table" {buttonName} />
 
 </div> -->
+
+{#await singleTable}
+           <h1 class="flex flex-row m-2">     Loading Employee Data <LoaderCircle class="animate-spin" /></h1>
+
+        
+      {:then employee} 
 
 <table id="table" class="w-full table-auto text-left">
         <thead class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold uppercase tracking-wider">
@@ -34,3 +40,4 @@
           
         </tbody>
       </table>
+      {/await}
